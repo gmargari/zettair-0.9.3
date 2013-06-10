@@ -1,0 +1,80 @@
+body         {font-family: Verdana, Arial, Helvetica;
+              font-size: 12pt;
+             }
+p            {font-family: Verdana, Arial, Helvetica;
+              font-size: 12pt;
+             }
+LI            {font-family: Verdana, Arial, Helvetica;
+              font-size: 12pt;
+             }
+H1           {font-family: Helvetica;
+              font-size: 16pt;
+              font-weight:bold
+             }
+             
+H2           {font-family: Helvetica;
+              font-size: 14pt;
+             }
+
+H3           {font-family: Helvetica;
+              font-size: 12pt;
+              font-weight:bold
+             }
+
+TD           {font-family: Verdana, Arial, Helvetica;
+              font-size: 12pt;
+             }
+
+CODE         {font-family: Courier;
+              font-size: 12pt;
+             }
+
+PRE          {font-family: Courier;
+              font-size: 8pt;
+             }
+CAPTION      {font-family: Courier;
+              font-size: 8pt;
+             }        
+
+.program-name { font-family: Courier }
+.file-name    { font-family: Courier }
+.shell-name   { font-family: Courier }
+.book-name    { font-family: Verdana, Arial, Helvetica;
+                font-style: italic }
+.output-name  { font-family: Courier }
+.input-word   { font-family: Courier }
+
+.shell-command { font-family: Courier;
+                 margin-left: 5%; }
+.remark        { font-size: 10pt;
+                 font-family: Verdana, Arial, Helvetica;
+                 margin-left: 10%;
+                 margin-right: 10% }
+.zettair-output { font-family: Courier;
+                  font-size: 11pt;
+                  margin-left: 5%; }
+.file-contents  { font-family: Courier;
+                  font-size: 11pt;
+                  margin-left: 5% }
+                   
+
+.usage       { font-family: Courier;
+               font-size: 12pt; }
+.option-flag { font-family: Courier;
+               font-size: 12pt; }
+.option-explanation {font-family: Verdana, Arial, Helvetica;
+              font-size: 12pt;
+             }
+.option-argument { font-style: italic }
+
+UL.option-list { list-style-position: outside;
+                 list-style-type: disk }
+UL.query-list { list-style-position: outside;
+                list-style-type: none }
+               
+.query-explanation { margin-left: 5%; 
+                     margin-top: 0.5em;
+                     margin-bottom: 1em;
+                     font-family: Verdana, Arial, Helvetica; }
+.sample-query   { font-family: Courier;
+                  font-size: 13pt }

@@ -1,0 +1,278 @@
+Zettair can be compiled using two different build systems.  The first
+(most commonly used) is using GNU configure and make.  The second is
+via Visual C++.  Instructions on configuration, compilation and
+installation using GNU configure and make are below.  See the section
+on Visual C++ below for instructions on compiling Zettair on windows.
+
+Note that in both cases, compilation of Zettair requires the presence
+of the zlib compression library.
+
+1. Configuration
+================
+
+From inside the top-level directory created when you unpacked the
+Zettair distribution, run the 'configure' script:
+
+  $ ./configure
+
+configure accepts a range of options.  To get a list of available
+options, run with the '--help' flag:
+
+  $ ./configure --help
+
+The most useful option is the --prefix option, which specifies which
+directory Zettair is going to be installed under.  So, for instance,
+to install Zettair in its own directory under '/usr/include', run
+configure like so:
+
+  $ ./configure --prefix=/usr/local/zettair
+
+The default Zettair installation directory is /usr/local.  Make sure
+to specify a directory into which you have, or can acquire, write
+permission: for anything under /usr, this probably means you need to
+be able to become the root user.
+
+
+2. Compilation
+==============
+
+Once configure has finished running, the Zettair distribution is ready
+to be compiled.  Also from inside the top-level Zettair distribution
+directory, run the 'make' program:
+
+  $ make
+
+
+3. Installation
+===============
+
+After Zettair has been compiled, you can install it in the directory
+you specified with the --prefix option to configure.  To do this, run
+make with the 'install' target:
+
+  $ make install
+
+Assuming that you selected '/usr/local/zettair' as your installation
+prefix, this will create the directories '/usr/local/zettair/bin' and
+'/usr/local/zettair/share'.  The main Zettair executable, zet, and a
+number of utilities will be installed in the former; configuration
+files will be installed in the latter.
+
+   While it is possible to run Zettair directly from the directory
+   you compiled it in without performing an explicit installation,
+   this is not recommended, as you have to explicitly specify the
+   location of the configuration files each time you build an index.
+   If you want to run from the compilation directory, we suggest you
+   run configure with the argument '--prefix=.', then run 'make
+   install'.
+
+To save yourself having to type the full path to the zet executable
+every time you want to run it (such as '/usr/local/zettair/bin/zet'),
+you might want to add Zettair's bin directory to your PATH.  How you
+do this depends on which shell you use.  For instance, with the bash
+shell, edit the file ~/.bash_profile, and add a line something like:
+
+   PATH=/usr/local/zettair/bin:$PATH
+
+This will probably not be necessary if you used the default prefix of
+'/usr/local'.
+
+4. Visual C++ configuration, compilation and installation
+=========================================================
+
+First, obtain the latest Zettair distribution and decompress it.
+Obtain the latest zlib source distribution (do NOT download the precompiled DLL)
+from http://www.zlib.net/ and decompress it into a seperate directory.
+Follow the zlib directions to create a statically-linked zlib.lib using 
+Visual C++.
+Locate zlib.lib within your zlib directory tree, and copy it to the
+root zettair-X.X/ directory.  
+In addition, copy zlib.h and zconf.h into zettair-X.X/src/include.
+
+Load zettair-X.X/win32/visualc6/zettair.dsw into Visual C++.
+Using the Build/Set Active Configuration menu option, select the
+executable that you wish to build.
+Build the executable by selecting Build/Rebuild All.  (Repeat for any
+further executables that you wish to build).  You may then copy the
+created executables whereever you like, and use them.
+
+4. Running
+==========
+
+Now you're ready to read the Zettair user manual, in the 'doc'
+subdirectory of the Zettair distribution.  
+
+First, though, you might like to check that everything installed and
+works ok (or perhaps you're just impatient to take your new purchase
+for a spin).  To help with this, we've included the text for Herman
+Melville's "Moby Dick" as a sample collection for you to play around
+with.  This can be found in the subdirectory sampletext/mobydick.
+
+Let's begin by indexing Moby Dick.  To do this, change your current
+directory to sampletext/mobydick.  (You can index it from anywhere,
+but this is simplest.)  We'll assume that the 'zet' executable is in
+your PATH; otherwise, substitute the full pathname to the executable
+wherever you see 'zet' below.  So, let's build this index:
+
+  $ zet -i -t TREC mobydick.trec
+
+The '-i' argument tells zet that we're building a new index.  '-t
+TREC' tells zet that the input documents are in TREC format.  If you
+don't know what the TREC format is, don't worry: it's just a
+convenient way for us to store multiple documents in the one file.
+The default input format is to treat each input file as a separate
+HTML document; since we want to treat each paragraph of Moby Dick as a
+separate document, this would mean a lot of small files.
+
+Now, the text of Moby Dick is less than 1.3 MBs in length, so this
+won't take long to run--Zettair is more used to working with document
+collections of 10 GB or more, but it won't complain.  When it's
+finished running, you should see two new files in the current
+directory, one called 'index.v.0', the 'index.map'.  These are
+Zettair's index files.  
+
+   If you're interested, the former is the index proper, containing
+   the list of terms and where each term occurs; the latter is the
+   document map, providing information about each document indexed.
+   Don't open these files, or you'll violate the EULA!  No, just
+   kidding, but they're in binary format, and so won't make a lot of
+   sense in your text editor.
+
+So now we're ready to run some queries.  To do this, we run zet again,
+this time without any options:
+
+  $ zet
+
+Zettair will load up the index (very quickly, in this case), and then
+prompt you for input.  Let's test the rumour that Moby Dick has
+something to say about whales:
+
+  > whale
+
+  1. Chapter32,Paragraph21 (score 2.506133, docid 688)
+  2. Chapter32,Paragraph19 (score 2.411723, docid 686)
+  3. Chapter32,Paragraph23 (score 2.375970, docid 690)
+  4. Chapter32,Paragraph46 (score 2.344365, docid 713)
+  5. Chapter91,Paragraph17 (score 2.256999, docid 1807)
+  6. Chapter91,Paragraph18 (score 2.247493, docid 1808)
+  7. Chapter75,Paragraph10 (score 2.245327, docid 1552)
+  8. Chapter0,Paragraph74 (score 2.150178, docid 74)
+  9. Chapter0,Paragraph69 (score 2.145605, docid 69)
+  10. Chapter0,Paragraph40 (score 2.122386, docid 40)
+  11. Chapter32,Paragraph24 (score 2.119576, docid 691)
+  12. Chapter0,Paragraph92 (score 2.118144, docid 92)
+  13. Chapter36,Paragraph25 (score 2.080975, docid 773)
+  14. Chapter32,Paragraph8 (score 2.059031, docid 675)
+  15. Chapter0,Paragraph51 (score 2.054273, docid 51)
+  16. Chapter0,Paragraph63 (score 2.050327, docid 63)
+  17. Chapter79,Paragraph6 (score 2.048261, docid 1590)
+  18. Chapter64,Paragraph60 (score 2.046396, docid 1387)
+  19. Chapter49,Paragraph7 (score 2.042479, docid 1059)
+  20. Chapter55,Paragraph10 (score 2.039895, docid 1226)
+
+  20 results of 576 shown (took 0.001639 seconds)
+
+This tells us that the word "whale" occurs in 576 documents in the
+collection (which is to say, paragraphs in Moby Dick).  Zettair thinks
+the most pertinent paragraph is paragraph 21 of chapter 32.  We can
+ask Zettair to print out this document using the 'cache' directive and
+specifying the document's docid:
+
+  > [cache:688]
+
+  <DOC>
+  <DOCNO>Chapter 32, Paragraph 21</DOCNO>
+  FOLIOS.  Among these I here include the following chapters:--I. The
+  SPERM WHALE; II. the RIGHT WHALE; III. the FIN-BACK WHALE; IV. the
+  HUMP-BACKED WHALE; V. the RAZOR-BACK WHALE; VI. the SULPHUR-BOTTOM
+  WHALE.
+  </DOC>
+
+Don't worry about the <DOC> and <DOCNO> tags: that's just part of the
+TREC format we've used to mark up Moby Dick for indexing.  You'll
+notice that the word 'whale' occurs seven times in little more than
+three lines, which is why Zettair thinks this is probably the
+paragraph you're looking for.
+
+You can, of course, query for more than one word at a time.  Say we
+were looking for a particular kind of whale:
+
+  > white whale
+
+  1. Chapter36,Paragraph25 (score 6.672417, docid 773)
+  [...]
+  20. Chapter100,Paragraph31 (score 5.192795, docid 1963)
+
+  20 results of 652 shown (took 0.000801 seconds)
+
+Hmm, 652 paragraphs--but "whale" only occurs in 576!  Well, what
+Zettair is reporting here is all the documents with either "white"
+_or_ "whale" in them.  We can tell specify that we only want documents
+that _both_ occur in:
+
+  > white AND whale
+
+  1. Chapter128,Paragraph4 (score 4.778444, docid 2413)
+  [...]
+  20. Chapter100,Paragraph11 (score 3.977057, docid 1943)
+
+  20 results of 110 shown (took 0.001045 seconds)
+
+or, probably more to the point, only documents that the exact phrase
+"white whale" occurs in:
+
+  > "white whale"
+
+  1. Chapter36,Paragraph25 (score 5.618426, docid 773)
+  [...]
+  20. Chapter59,Paragraph4 (score 4.402413, docid 1269)
+
+  20 results of 80 shown (took 0.000999 seconds)
+
+
+This is great so far (or at least, we hope you think so), but it gets
+tiresome having to individually request each document to see if it
+what we're looking for, especially if the documents are longer than a
+single paragraph.  What we really want is for the list of results to
+include a summary of each document.  And we can ask Zettair to provide
+just this to us.
+
+To do so, we'll have to restart Zettair.  Hit "CONTROL-D" or whatever
+key combination indicates end of input on your system to end your
+current session.  This time, we'll run the zet executable with the
+'-q' option to indicate that we'd like to see document summaries, and
+what form we want these summaries to be in.  We'll also restrict
+output to just the top 2 results:
+
+  $ zet -q capitalise -n 2
+
+Zettair can highlight your search terms within the document summaries
+in a number of different ways, 'capitalise' being one of them.  So,
+let's try out some summaries:
+
+  > ship sea storm
+
+  1. Chapter48,Paragraph51 (score 9.602944, docid 1051)
+  Wet, drenched through, and shivering cold, despairing of SHIP or
+  boat, we lifted up our eyes as the dawn came on. The mist still
+  spread over the SEA, the empty lantern lay crushed in the bottom of
+  the boat. ...We all heard a faint creaking, as of ropes and yards
+  hitherto muffled by the STORM. ...Affrighted, we all sprang into the
+  SEA as the SHIP at last loomed into view, bearing right down upon us
+  within a distance of not much more than its length.
+  2. Chapter0,Paragraph92 (score 9.216548, docid 92)
+  "Oh, the rare old Whale, mid STORM and gale In his ocean home will
+  be A giant in might, where might is right, And King of the boundless
+  SEA." --WHALE SONG.
+
+  2 results of 526 shown (took 0.012296 seconds)
+
+  > "dark blue ocean"
+
+  1. Chapter35,Paragraph11 (score 10.445776, docid 745)
+  "Roll on, thou deep and DARK BLUE OCEAN, roll! Ten thousand
+  blubber-hunters sweep over thee in vain."
+
+  1 results of 1 shown (took 0.002945 seconds)
+
+And that concludes our tour.

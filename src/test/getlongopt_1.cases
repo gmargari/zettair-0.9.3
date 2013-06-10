@@ -1,0 +1,155 @@
+# test cases for getlongopt
+#
+# commands are:
+#   option longname shortname arg id -- adds an option to the current list, where:
+#     longname is the string to match (to match '--blah' use 'blah')
+#     shortname is the character to match (to match '-v' use v)
+#     arg is whether to require an argument, with 0 == no argument, 
+#       1 == required argument, 2 == optional argument
+#     id is the number to return when this option is matched
+#
+#   print -- prints the current options
+#
+#   clear -- clears the current options
+#
+#   parse options* -- prints out a parsed representation of options provided
+#
+#   check options* -- verifies that the parsed representation of the
+#     options is the same as the options listed on the next few lines.
+#     Next line must be number of options expected (by itself).
+#     Subsequent lines are of the form 'ret [id arg]' ret is the
+#     return value from getlongopt ('OK' or 'UNKNOWN' etc) and id is the id
+#     number of the expected option, and arg is the expected argument string.
+#     Comments are not currently supported within these lines
+#
+#   # comment -- its a comment (must be on its own line)
+#
+# written nml 2004-06-07
+
+# some options to play with
+option blah b 0 101
+option foo f 1 102
+option bar r 2 103
+
+# some simple tests
+
+check
+END
+
+check -b
+OK 101
+END
+
+check --blah
+OK 101
+END
+
+check -r
+OK 103
+END
+
+check -f
+MISSING_ARG
+
+check --foo
+MISSING_ARG
+
+check -a
+UNKNOWN
+
+check --unknown
+UNKNOWN
+
+check -b arg
+OK 101
+END
+
+check -r arg
+OK 103 arg
+END
+
+check -br
+OK 101
+OK 103
+END
+
+check -bf arg
+OK 101
+OK 102 arg
+END
+
+check -bf
+OK 101
+MISSING_ARG
+
+# check all argument passing syntax quirks
+
+check -f arg
+OK 102 arg
+END
+
+check --foo arg
+OK 102 arg
+END
+
+check --foo=arg
+OK 102 arg
+END
+
+# check ambiguity resolution
+
+check --bar -b
+OK 103 
+OK 101
+END
+
+check --bar --blah
+OK 103 
+OK 101
+END
+
+check --bar arg
+OK 103 arg
+END
+
+# bigger test
+
+check --foo arg --bar=stuff -b -f arg --bar arg --bar --blah --blah
+OK 102 arg
+OK 103 stuff
+OK 101
+OK 102 arg
+OK 103 arg
+OK 103
+OK 101
+OK 101
+END
+
+# obscure stuff with - and --
+
+check -
+END
+
+check -b -
+OK 101
+END
+
+check - -b
+END
+
+check -f -
+OK 102 -
+END
+
+check --bar -
+OK 103 -
+END
+
+check -b -- -b
+OK 101
+END
+
+check --bar --
+OK 103
+END
+

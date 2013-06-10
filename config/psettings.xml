@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<psettings>
+  <!-- each type gets its own configuration -->
+  <type mimetype="text/html" default="true">
+    <!-- list of things that we don't want to index -->
+	<tag name="sgmlcomment" index="false" flow="true"/>  <!-- note that comments are handled as the psuedo-tags 'sgmlcomment' and '/sgmlcomment' -->
+	<tag name="/sgmlcomment" index="pop" flow="true"/>
+    <tag name="dochdr" index="false"/>
+    <tag name="javascript" index="false" flow="true"/>
+    <tag name="/javascript" flow="true"/>
+    <tag name="profile" index="false"/>
+    <tag name="script" index="false" flow="true"/>
+    <tag name="/script" flow="true"/>
+    <tag name="style" index="false" flow="true"/>
+    <tag name="/style" flow="true"/>
+    <tag name="vbscript" index="false" flow="true"/>
+    <tag name="/vbscript" flow="true"/>
+	<tag name="title" index="title"/>
+
+    <!-- below tag pairs just establish flow attribute -->
+	<tag name="link" flow="true"/> <tag name="/link" flow="true"/>
+	<tag name="meta" flow="true"/> <tag name="/meta" flow="true"/>
+	<tag name="bdo" flow="true"/> <tag name="/bdo" flow="true"/>
+	<tag name="a" flow="true"/> <tag name="/a" flow="true"/>
+	<tag name="b" flow="true"/> <tag name="/b" flow="true"/>
+	<tag name="big" flow="true"/> <tag name="/big" flow="true"/>
+	<tag name="font" flow="true"/> <tag name="/font" flow="true"/>
+	<tag name="i" flow="true"/> <tag name="/i" flow="true"/>
+	<tag name="s" flow="true"/> <tag name="/s" flow="true"/>
+	<tag name="small" flow="true"/> <tag name="/small" flow="true"/>
+	<tag name="strike" flow="true"/> <tag name="/strike" flow="true"/>
+	<tag name="sub" flow="true"/> <tag name="/sub" flow="true"/>
+	<tag name="sup" flow="true"/> <tag name="/sup" flow="true"/>
+	<tag name="tt" flow="true"/> <tag name="/tt" flow="true"/>
+	<tag name="u" flow="true"/> <tag name="/u" flow="true"/>
+	<tag name="acronym" flow="true"/> <tag name="/acronym" flow="true"/>
+	<tag name="address" flow="true"/> <tag name="/address" flow="true"/>
+	<tag name="cite" flow="true"/> <tag name="/cite" flow="true"/>
+	<tag name="code" flow="true"/> <tag name="/code" flow="true"/>
+	<tag name="del" flow="true"/> <tag name="/del" flow="true"/>
+	<tag name="dfn" flow="true"/> <tag name="/dfn" flow="true"/>
+	<tag name="em" flow="true"/> <tag name="/em" flow="true"/>
+	<tag name="kbd" flow="true"/> <tag name="/kbd" flow="true"/>
+	<tag name="q" flow="true"/> <tag name="/q" flow="true"/>
+	<tag name="samp" flow="true"/> <tag name="/samp" flow="true"/>
+	<tag name="strong" flow="true"/> <tag name="/strong" flow="true"/>
+	<tag name="var" flow="true"/> <tag name="/var" flow="true"/>
+	<tag name="span" flow="true"/> <tag name="/span" flow="true"/>
+  </type>
+
+  <type mimetype="application/x-trec" endtag="/doc" default="true">
+    <!-- list of things that we don't want to index -->
+	<tag name="docno" index="identifier"/>  <!-- docno identifies the document -->
+	<tag name="dochdr" index="offend"/>     <!-- don't process tags in dochdr -->
+	<tag name="/dochdr" index="binary"/>    <!-- after /dochdr we check for binary document content -->
+    <tag name="au" index="false"/>
+    <tag name="byline" index="false"/>
+	<tag name="sgmlcomment" index="false" flow="true"/>  <!-- note that comments are handled as the psuedo-tags 'sgmlcomment' and '/sgmlcomment' -->
+	<tag name="/sgmlcomment" index="pop" flow="true"/>
+    <tag name="dateline" index="false"/>
+    <tag name="docid" index="false"/>
+    <tag name="docoldno" index="false"/>
+    <tag name="fileid" index="false"/>
+    <tag name="first" index="false"/>
+    <tag name="ht" index="false"/>
+    <tag name="javascript" index="false" flow="true"/>
+    <tag name="/javascript" flow="true"/>
+    <tag name="parent" index="false"/>
+    <tag name="profile" index="false"/>
+    <tag name="script" index="false" flow="true"/>
+    <tag name="/script" flow="true" flow="true"/>
+    <tag name="second" index="false"/>
+    <tag name="style" index="false" flow="true"/>
+    <tag name="/style" flow="true"/>
+    <tag name="vbscript" index="false" flow="true"/>
+    <tag name="/vbscript" index="false" flow="true"/>
+	<tag name="title" index="title"/>
+
+    <!-- below tag pairs just establish flow attribute -->
+	<tag name="link" flow="true"/> <tag name="/link" flow="true"/>
+	<tag name="meta" flow="true"/> <tag name="/meta" flow="true"/>
+	<tag name="bdo" flow="true"/> <tag name="/bdo" flow="true"/>
+	<tag name="a" flow="true"/> <tag name="/a" flow="true"/>
+	<tag name="b" flow="true"/> <tag name="/b" flow="true"/>
+	<tag name="big" flow="true"/> <tag name="/big" flow="true"/>
+	<tag name="font" flow="true"/> <tag name="/font" flow="true"/>
+	<tag name="i" flow="true"/> <tag name="/i" flow="true"/>
+	<tag name="s" flow="true"/> <tag name="/s" flow="true"/>
+	<tag name="small" flow="true"/> <tag name="/small" flow="true"/>
+	<tag name="strike" flow="true"/> <tag name="/strike" flow="true"/>
+	<tag name="sub" flow="true"/> <tag name="/sub" flow="true"/>
+	<tag name="sup" flow="true"/> <tag name="/sup" flow="true"/>
+	<tag name="tt" flow="true"/> <tag name="/tt" flow="true"/>
+	<tag name="u" flow="true"/> <tag name="/u" flow="true"/>
+	<tag name="acronym" flow="true"/> <tag name="/acronym" flow="true"/>
+	<tag name="address" flow="true"/> <tag name="/address" flow="true"/>
+	<tag name="cite" flow="true"/> <tag name="/cite" flow="true"/>
+	<tag name="code" flow="true"/> <tag name="/code" flow="true"/>
+	<tag name="del" flow="true"/> <tag name="/del" flow="true"/>
+	<tag name="dfn" flow="true"/> <tag name="/dfn" flow="true"/>
+	<tag name="em" flow="true"/> <tag name="/em" flow="true"/>
+	<tag name="kbd" flow="true"/> <tag name="/kbd" flow="true"/>
+	<tag name="q" flow="true"/> <tag name="/q" flow="true"/>
+	<tag name="samp" flow="true"/> <tag name="/samp" flow="true"/>
+	<tag name="strong" flow="true"/> <tag name="/strong" flow="true"/>
+	<tag name="var" flow="true"/> <tag name="/var" flow="true"/>
+	<tag name="span" flow="true"/> <tag name="/span" flow="true"/>
+  </type>
+
+  <type mimetype="application/x-inex" endtag="/article" default="true">
+    <!-- list of things that we don't want to index -->
+	<tag name="dirpath" index="identifier"/>
+	<tag name="sgmlcomment" index="false" flow="true"/>  <!-- note that comments are handled as the psuedo-tags 'sgmlcomment' and '/sgmlcomment' -->
+	<tag name="/sgmlcomment" index="pop" flow="true"/>
+    <tag name="dochdr" index="false"/>
+    <tag name="javascript" index="false" flow="true"/>
+    <tag name="/javascript" flow="true"/>
+    <tag name="profile" index="false"/>
+    <tag name="script" index="false" flow="true"/>
+    <tag name="/script" flow="true"/>
+    <tag name="style" index="false" flow="true"/>
+    <tag name="/style" flow="true"/>
+    <tag name="vbscript" index="false" flow="true"/>
+    <tag name="/vbscript" flow="true"/>
+	<tag name="title" index="title"/>
+  </type>
+
+  <!-- HTML tags through which text can flow:
+  link meta bdo a b big font i s small strike sub sup tt u acronym address
+  cite code del dfn em kbd q samp strong style var span sgmlcomment
+  script javascript vbscript -->
+</psettings>
+

@@ -1,0 +1,14 @@
+moby.txt contains the full text of Herman Melville's
+"Moby Dick; or The Whale" (1851), converted into TREC
+format, with each paragraph forming a document.  We use a
+CHAPTER, PARAGRAPH heading in place of the TREC document
+number.  It can be indexed with a command similar to:
+
+  zet -i -t TREC moby.txt
+
+and then, from the same directory,
+
+  zet -q capitalise
+
+to run queries and get document summaries in the results,
+with query terms highlighted by capitalisation.

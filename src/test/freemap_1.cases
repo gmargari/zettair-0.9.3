@@ -1,0 +1,712 @@
+# freemap_1.cases is a test suite for the freemap module.  See freemap_1.c
+# for more details
+#
+# written nml 2004-08-23
+
+# simple cases
+
+new
+	case_1_1 0 1 100
+malloc 
+	0 10 1
+malloc
+	0 9 1
+malloc
+	0 8 1
+malloc
+	0 7 1
+malloc
+	0 6 1
+malloc 
+	0 5 1
+malloc
+	0 4 1
+malloc
+	0 3 1
+malloc
+	0 2 1
+malloc
+	0 1 1
+malloc 
+	0 10 1
+malloc
+	0 9 1
+malloc
+	0 8 1
+malloc
+	0 7 1
+malloc
+	0 6 1
+malloc 
+	0 5 1
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+autofree
+	0
+finish
+
+new
+	case_1_2 0 1 100
+malloc 
+	0 10 1
+malloc
+	0 9 1
+malloc
+	0 8 1
+malloc
+	0 7 1
+malloc
+	0 6 1
+malloc 
+	0 5 1
+malloc
+	0 4 1
+malloc
+	0 3 1
+malloc
+	0 2 1
+malloc
+	0 1 1
+malloc 
+	0 10 1
+malloc
+	0 9 1
+malloc
+	0 8 1
+malloc
+	0 7 1
+malloc
+	0 6 1
+malloc 
+	0 5 1
+autofree
+	15
+autofree
+	14
+autofree
+	13
+autofree
+	12
+autofree
+	11
+autofree
+	10
+autofree
+	9
+autofree
+	8
+autofree
+	7
+autofree
+	6
+autofree
+	5
+autofree
+	4
+autofree
+	3
+autofree
+	2
+autofree
+	1
+autofree
+	0
+finish
+
+new
+	case_1_3 0 1 100
+malloc 
+	0 10 1
+malloc
+	0 9 1
+malloc
+	0 8 1
+malloc
+	0 7 1
+malloc
+	0 6 1
+malloc 
+	0 5 1
+autofree
+	5
+autofree
+	1
+autofree
+	3
+autofree
+	0
+autofree
+	1
+autofree
+	0
+finish
+
+# test edge cases
+
+# this test case should probably succeed, but making it to so would
+# slow everything down, and it really isn't that important anyway.  The
+# new case_2_1 is close enough
+
+# test used/unused contiguous allocations
+#new
+	#case_2_1 0 1 10
+#malloc
+	#0 5 1
+#autofree
+	#0
+#malloc 
+	#0 10 1
+#autofree
+	#0
+
+# test used/unused contiguous allocations
+new
+	case_2_1 0 1 10
+malloc
+	0 5 1
+autofree
+	0
+locmalloc 
+	0 0 0 10 1
+autofree
+	0
+finish
+
+# test append anti-fragmentation
+new
+	case_2_2 2 1 10
+malloc
+	0 5 1
+autofree
+	0
+malloc
+	0 3 1
+malloc
+	0 7 0
+malloc
+	0 5 1
+autofree
+	0
+autofree
+	0
+finish
+
+# test multiple files
+new
+	case_2_3 0 2 10 10
+malloc
+	0 5 1
+malloc
+	0 10 1
+autofree
+	0
+autofree
+	0
+finish
+
+# request a too-large allocation
+new
+	case_2_4 0 2 5 10
+malloc
+	0 11 0
+malloc
+	0 10 1
+finish
+
+# request an allocation thats too large for the first file
+new
+	case_2_5 0 2 5 10
+malloc
+	0 10 0
+malloc
+	0 10 1
+finish
+
+# test (whitebox) all allocation and free routes through freemap.c
+
+# first freemap_malloc_location
+
+new
+    case_white_1_1 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate it all, requiring merger between used and unused
+locmalloc
+    0 0 0 10 1
+finish
+
+new
+    case_white_1_2 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate it all using append, requiring merger between used and unused
+locmalloc
+    0 0 0 9 1
+# fail to allocate stuff that should have been appended
+locmalloc
+    0 0 9 1 0
+finish
+
+new
+    case_white_1_3 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate it all, append off by 1, requiring merger between used and unused
+locmalloc
+    0 0 0 8 1
+# allocate rest
+locmalloc
+    0 0 8 2 1
+finish
+
+new
+    case_white_1_4 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate some, requiring merger between used and unused, leaving some used
+locmalloc
+    0 0 1 9 1
+finish
+
+new
+    case_white_1_5 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate some, requiring merger between used and unused, leaving some unused
+locmalloc
+    0 0 0 9 1
+finish
+
+new
+    case_white_1_6 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate some, requiring merger between used and unused, leaving some of both
+locmalloc
+    0 0 1 8 1
+finish
+
+new
+    case_white_1_7 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused
+locmalloc
+    0 0 5 5 1
+finish
+
+new
+    case_white_1_8 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused, using append
+locmalloc
+    0 0 5 4 1
+# fail to allocate the next position
+locmalloc
+    0 0 9 1 0
+finish
+
+new
+    case_white_1_9 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused, append off by 1
+locmalloc
+    0 0 5 3 1
+# allocate the next position
+locmalloc
+    0 0 8 2 1
+finish
+
+new
+    case_white_1_10 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused, don't consume
+locmalloc
+    0 0 5 3 1
+finish
+
+new
+    case_white_1_11 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused, don't consume, split into two 
+locmalloc
+    0 0 6 3 1
+finish
+
+new
+    case_white_1_12 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from unused, don't consume, leave only front part
+locmalloc
+    0 0 6 4 1
+finish
+
+new
+    case_white_1_13 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used
+locmalloc
+    0 0 0 5 1
+finish
+
+new
+    case_white_1_14 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used, using append
+locmalloc
+    0 0 0 4 1
+# fail to allocate next block
+locmalloc
+    0 0 4 1 0
+finish
+
+new
+    case_white_1_15 1 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used, append off by 1
+locmalloc
+    0 0 0 3 1
+# allocate next block
+locmalloc
+    0 0 3 2 1
+finish
+
+new
+    case_white_1_16 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used, don't consume
+locmalloc
+    0 0 0 4 1
+finish
+ 
+new
+    case_white_1_17 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used, don't consume, split into two
+locmalloc
+    0 0 1 3 1
+finish
+
+new
+    case_white_1_18 0 1 10
+# put half onto unused list
+locmalloc
+    0 0 0 5 1
+autofree
+    0
+# allocate from used, don't consume, leave only front part
+locmalloc
+    0 0 1 4 1
+finish
+
+new
+    case_white_1_19 0 3 10 10 10
+# allocate from last file
+locmalloc
+    0 2 0 10 1
+finish
+
+new
+    case_white_1_20 0 1 10
+# 0 length allocation
+locmalloc
+    0 0 0 0 1
+finish
+
+new
+    case_white_1_21 0 1 10
+# 0 length allocation
+locmalloc
+    0 0 1 0 1
+finish
+
+# now test malloc
+
+new
+    case_white_2_1 0 1 10
+# allocate from unused
+malloc
+    0 10 1
+finish
+
+new
+    case_white_2_2 1 1 10
+# allocate from unused, using append
+malloc
+    0 9 1
+# fail to allocate next block
+locmalloc
+    0 0 9 1 0
+finish
+ 
+new
+    case_white_2_3 1 1 10
+# allocate from unused, append off by 1
+malloc
+    0 8 1
+# allocate next block
+locmalloc
+    0 0 8 2 1
+finish
+
+new
+    case_white_2_4 0 1 10
+# allocate from unused, don't consume
+malloc
+    0 9 1
+finish
+ 
+new
+    case_white_2_5 0 1 10
+# put allocation onto used list
+malloc
+    0 10 1
+autofree 
+    0
+# allocate from used
+malloc
+    0 10 1
+finish
+  
+new
+    case_white_2_6 1 1 10
+# put allocation onto used list
+malloc
+    0 10 1
+autofree 
+    0
+# allocate from used, using append
+malloc
+    0 9 1
+# fail to allocate next block 
+locmalloc
+    0 0 9 1 0
+finish
+ 
+new
+    case_white_2_7 1 1 10
+# put allocation onto used list
+malloc
+    0 10 1
+autofree 
+    0
+# allocate from used, append off by 1
+malloc
+    0 8 1
+# allocate next location
+locmalloc
+    0 0 8 2 1
+finish
+
+# 0 length allocation
+new
+    case_white_2_8 0 1 10
+malloc
+    0 0 1
+finish
+
+# now test free
+
+new
+    case_white_3_1 0 1 10
+locmalloc 
+    0 0 0 10 1
+autofree
+    0
+# force free to coalesce with block after
+locmalloc
+    0 0 0 9 1
+autofree
+    0
+malloc
+    0 10 1
+finish
+
+new
+    case_white_3_2 0 1 10
+locmalloc 
+    0 0 0 10 1
+autofree
+    0
+# force free to coalesce with block before
+locmalloc
+    0 0 1 9 1
+autofree
+    0
+malloc
+    0 10 1
+finish
+
+new
+    case_white_3_2 0 1 10
+locmalloc 
+    0 0 0 10 1
+autofree
+    0
+# force free to coalesce with blocks both before and after
+locmalloc
+    0 0 1 8 1
+autofree
+    0
+malloc
+    0 10 1
+finish
+
+# now test realloc
+
+new
+    case_white_4_1 0 1 10
+# put entire allocation on free list, so we don't realloc from unused
+locmalloc 
+    0 0 0 10 1
+autofree
+    0
+locmalloc
+    0 0 0 5 1
+realloc
+    0 0 0 5 5 1
+finish
+
+new
+    case_white_4_2 1 1 10
+# put entire allocation on free list, so we don't realloc from unused
+locmalloc
+    0 0 0 10 1
+autofree
+    0
+locmalloc
+    0 0 0 5 1
+# realloc with append
+realloc
+    0 0 0 5 4 1
+finish
+    
+new
+    case_white_4_3 1 1 10
+# put entire allocation on free list, so we don't realloc from unused
+locmalloc
+    0 0 0 10 1
+autofree
+    0
+locmalloc
+    0 0 0 5 1
+# realloc with append off by 1
+realloc
+    0 0 0 5 3 1
+finish
+
+new
+    case_white_4_4 0 1 10
+locmalloc
+    0 0 0 5 1
+realloc
+    0 0 0 5 5 1
+finish
+
+new
+    case_white_4_5 1 1 10
+locmalloc
+    0 0 0 5 1
+# realloc with append
+realloc
+    0 0 0 5 4 1
+finish
+    
+new
+    case_white_4_6 1 1 10
+locmalloc
+    0 0 0 5 1
+# realloc with append off by 1
+realloc
+    0 0 0 5 3 1
+finish
+

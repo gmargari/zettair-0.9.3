@@ -1,0 +1,38 @@
+# dirichlet.metric is a functional description in our funny zettair metric
+# language (see metric.py) of how the dirichlet-smoothed
+# query-likelihood language modelling metric should operate
+# (henceforth just dirichlet).  
+#
+# See Zhai and Lafferty, 'A study of smoothing methods for language models
+# applied to information retrieval' for details.
+# 
+# Dirichlet smoothing gives 
+#   p(t|d) = |d| * f_dt / |d| (mu + |d|) + mu * Ft / |C| (mu + |d|)
+#
+#   where:
+#     |d| is the length of the document (in terms)
+#     f_dt is the frequency of a term in a given document
+#     Ft is the number of occurrances of a term in the collection
+#     |C| is the length of the collection (in terms)
+#     mu is a parameter
+#
+# Fiddling with this formula, we can show that:
+#   log(p(q | d)) = |q|.log(mu / (mu + |d|)) 
+#     + sum[ log(1 + |C| * f_dt / (mu * Ft)) ]
+#
+# where the sum is taken over all terms in the query AND document.  Note that
+# this form is much simpler to evaluate.
+#
+# written nml 2005-06-8
+
+parameter float mu;
+
+decode() {
+    float w_t = (float) (terms / (mu * F_t));
+    accumulator += (float) logf(1 + f_dt * w_t);
+}
+
+post() {
+    accumulator += Q_terms * (float) logf(mu / (mu + D_terms));
+}
+

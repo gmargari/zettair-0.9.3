@@ -1,0 +1,36 @@
+# pcosine.metric is a functional description in our funny zettair metric
+# language (see metric.py) of how the pivoted cosine metric should operate.  
+#
+# The pivoted cosine metric uses pivoted document length normalisation
+# over a fairly standard cosine metric.  A description of some
+# variations of the cosine metric are given in Managing Gigabytes
+# by Whitten, Moffat, Bell (2nd ed), page 185+.  The one we'll be
+# using here calculates the inner product of the documents, treating
+# each term as a dimension, where the lengths along each dimension are
+# given by:
+#
+#   w_qt = f_qt * ln (1 + (N / f_t))
+#   w_dt = 1 + ln (f_dt)
+#
+# Thus the weight of a document is calculated as 
+#
+#   sum (for each term in the query and document) of w_dt * w_qt
+#
+# The document length normalisation is implemented as in 
+# 'Pivoted Document Length Normalization' by Singhal, Buckley, Mitra.
+# The suggested pivot is 0.2.
+#
+# written nml 2005-07-18
+
+parameter float pivot;
+
+decode() {
+    const float w_qt = (float) (f_qt * (float) logf(1 + (N / (float) f_t)));
+
+	accumulator += w_qt * (1 + (float) logf(f_dt));
+}
+
+post() {
+    accumulator /= (1.0F - pivot) + pivot * (D_weight / (float) avg_D_weight);
+}
+

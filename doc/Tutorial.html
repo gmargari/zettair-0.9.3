@@ -1,0 +1,216 @@
+<html>
+  <head>
+    <title>Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body bgcolor="#ffffff">
+
+    <h1>Zettair -- A Tutorial Introduction</h1>
+
+    <h2>Introduction</h2>
+
+    <p>This page contains a tutorial-style introduction to Zettair.
+    It will show you how to index a document collection using Zettair,
+    and how to run queries against that index.  It only introduces the
+    basic functionality for each use.  For more details, see the
+    pages on <a href="Build.html">building</a> and 
+    <a href="Search.html">searching</a> using Zettair.</p>
+
+    <p>This tutorial assumes that you have downloaded, unpacked,
+    compiled, and installed the Zettair distribution.  If you have
+    not done so, please grab Zettair from 
+    <a href="http://www.seg.rmit.edu.au/zettair">the Zettair home
+      page</a>, unpack it, and follow the installation instructions
+    in the INSTALL file contained within the distribution.  We also
+    assume that the <span class="program-name">zet</span> executable
+    has been installed in your <span class="shell-name">PATH</span>.
+    If not, use the full path for the executable (for instance,
+    <span class="program-name">/usr/local/zettair/bin/zet</span>).</p>
+
+    <h2>Building an index</h2>
+
+    <p>To help you get up and running quickly with Zettair, we have
+    included the full text for Herman Melville's 
+    <span class="book-name">Moby Dick</span> as a sample 
+    document collection for you to play around with.  This can be
+    found in the subdirectory 
+    <span class="file-name">txt</span> of the Zettair
+    distribution.</p>
+
+    <p>Let's begin by indexing Moby Dick.  To do this, change your current
+    directory to <span class="file-name">txt</span>.  (You can index it 
+    from anywhere, but this is simplest.)  We'll assume that the 
+    <span class="program-name">zet</span> executable is in
+    your PATH; otherwise, substitute the full pathname to the executable
+    wherever you see 'zet' below.  So, let's build this index:</p>
+    
+    <div class="shell-command">
+      $ zet -i moby.txt
+    </div>
+    
+    <p>The '-i' argument tells zet that we're building a new index.  
+    The text of Moby Dick is less than 1.3 MBs in length, so this
+    won't take long to run - Zettair is more used to working with document
+    collections of 10 GB or more, but it won't complain.  When it's
+    finished running, you should see four new files in the current
+    directory, all prefixed with &quot;index&quot;
+    These are Zettair's index files.</p>
+    
+     <h2>Querying the index</h2>
+    
+    <p>So now we're ready to run some queries.  To do this, we run zet again,
+    this time without any options:</p>
+    
+    <div class="shell-command">
+      $ zet
+    </div>
+    
+    <p>Zettair will load up the index (very quickly, in this case), and then
+    prompt you for input.  Let's test the rumour that Moby Dick has
+    something to say about whales:</p>
+    
+<pre><div class="zettair-output">&gt; whale
+1. Chapter 32, Paragraph 46 (score 0.814503, docid 713)
+2. Chapter 32, Paragraph 23 (score 0.687340, docid 690)
+3. Chapter 32, Paragraph 25 (score 0.542362, docid 692)
+4. Chapter 32, Paragraph 8 (score 0.489850, docid 675)
+5. Chapter 32, Paragraph 22 (score 0.488983, docid 689)
+6. Chapter 32, Paragraph 26 (score 0.484616, docid 693)
+7. Chapter 75, Paragraph 10 (score 0.453542, docid 1552)
+8. Chapter 32, Paragraph 21 (score 0.433975, docid 688)
+9. Chapter 41, Paragraph 7 (score 0.403410, docid 875)
+10. Chapter 81, Paragraph 47 (score 0.402218, docid 1646)
+11. Chapter 41, Paragraph 3 (score 0.378583, docid 871)
+12. Chapter 56, Paragraph 5 (score 0.367106, docid 1236)
+13. Chapter 0, Paragraph 74 (score 0.340201, docid 74)
+14. Chapter 45, Paragraph 17 (score 0.333519, docid 969)
+15. Chapter 32, Paragraph 35 (score 0.332929, docid 702)
+16. Chapter 45, Paragraph 5 (score 0.331750, docid 957)
+17. Chapter 87, Paragraph 21 (score 0.330964, docid 1723)
+18. Chapter 91, Paragraph 6 (score 0.327630, docid 1796)
+19. Chapter 55, Paragraph 7 (score 0.326381, docid 1223)
+20. Chapter 68, Paragraph 6 (score 0.324882, docid 1411)
+
+20 results of 791 shown (took 0.000702 seconds)</div></pre>
+    
+    <p>This tells us that the word "whale" occurs in 791 documents in the
+    collection (which is to say, paragraphs in Moby Dick).  Zettair thinks
+    the most pertinent paragraph is paragraph 46 of chapter 32.  We can
+    ask Zettair to print out this document using the 'cache' directive and
+    specifying the document's docid:</p>
+    
+<pre><div class="zettair-output">&gt; [cache:713]
+
+&lt;DOC&gt;
+&lt;DOCNO&gt;Chapter 32, Paragraph 46&lt;/DOCNO&gt;
+Beyond the DUODECIMO, this system does not proceed, inasmuch as the
+Porpoise is the smallest of the whales.  Above, you have all the
+Leviathans of note.  But there are a rabble of uncertain, fugitive,
+half-fabulous whales, which, as an American whaleman, I know by
+reputation, but not personally.  I shall enumerate them by their
+fore-castle appellations; for possibly such a list may be valuable to
+future investigators, who may complete what I have here but begun.
+If any of the following whales, shall hereafter be caught and marked,
+then he can readily be incorporated into this System, according to
+his Folio, Octavo, or Duodecimo magnitude:--The Bottle-Nose Whale;
+the Junk Whale; the Pudding-Headed Whale; the Cape Whale; the Leading
+Whale; the Cannon Whale; the Scragg Whale; the Coppered Whale; the
+Elephant Whale; the Iceberg Whale; the Quog Whale; the Blue Whale; etc.
+&lt;From Icelandic, Dutch, and old English authorities, there might
+be quoted other lists of uncertain whales, blessed with all manner of
+uncouth names.  But I omit them as altogether obsolete; and can
+hardly help suspecting them for mere sounds, full of Leviathanism,
+but signifying nothing.
+&lt;DOC&gt;&gt;</div></pre>
+
+    <p>
+    Don't worry about the <span class="output-name">&lt;DOC&gt;</span> 
+    and <span class="output-name">&lt;DOCNO&gt;</span> tags: that's just 
+    part of the TREC format we've used to mark up Moby Dick for indexing.  
+    You'll notice that the word 'whale' occurs often, which is why Zettair 
+    thinks this is probably the paragraph you're looking for.
+    </p>
+
+    <h2>Queries with multiple terms</h2>
+    
+    <p>You can, of course, query for more than one word at a time.  Say we
+    were looking for a particular kind of whale:</p>
+    
+<pre><div class="zettair-output">&gt; white whale
+
+1. Chapter 42, Paragraph 4 (score 1.429675, docid 897)
+[...]
+20. Chapter 48, Paragraph 2 (score 0.752030, docid 1002)
+
+
+20 results of 852 shown (took 0.000801 seconds)</div></pre>
+    
+    <p>Hmm, 852 paragraphs--but "whale" only occurs in 791!  Well, what
+    Zettair is reporting here is all the documents with either "white"
+    <i>or</i> "whale" in them.  We can tell specify that we only want documents
+    that <i>both</i> occur in:</p>
+    
+<pre><div class="zettair-output">&gt; white AND whale
+
+1. Chapter 59, Paragraph 4 (score 1.255408, docid 1269)
+[...]
+20. Chapter 54, Paragraph 88 (score 0.806199, docid 1191)
+
+20 results of 130 shown (took 0.000330 seconds)</div></pre>
+    
+    <p>or, probably more to the point, only documents that the exact phrase
+    "white whale" occurs in:</p>
+    
+<pre><div class="zettair-output">&gt; "white whale"
+
+1. Chapter 36, Paragraph 41 (score 1.357970, docid 789)
+[...]
+20. Chapter 52, Paragraph 4 (score 0.840175, docid 1088)
+
+20 results of 91 shown (took 0.000307 seconds)</div></pre>
+
+    <h2>Document summaries</h2>
+    
+    <p>This is great so far (or at least, we hope you think so), but it gets
+    tiresome having to individually request each document to see if it's
+    what we're looking for, especially if the documents are longer than a
+    single paragraph.  What we really want is for the list of results to
+    include a summary of each document.  And we can ask Zettair to provide
+    just this to us.</p>
+    
+    <p>To do so, we'll have to restart Zettair.  Hit 
+    <span class="shell-name">CONTROL-D</span> or whatever
+    key combination indicates end of input on your system to end your
+    current session.  This time, we'll run the zet executable with the
+    '--summary' option to indicate that we'd like to see document summaries, and
+    what form we want these summaries to be in.  We'll also restrict
+    output to just the top 2 results:</p>
+    
+    <div class="shell-command">
+      $ zet --summary=capitalise -n 2
+    </div>
+    
+    <p>Zettair can highlight your search terms within the document summaries
+    in a number of different ways, <span class="shell-name">capitalise</span> 
+    being one of them.  So,
+    let's try out some summaries:</p>
+    
+<pre><div class="zettair-output">&gt; ship sea storm
+
+1. Chapter 9, Paragraph 18 (score 2.973852, docid 261)
+A dreadful STORM comes on, the SHIP is like to break... He sees no black sky and raging SEA, feels not the reeling timbers, and little hears he or heeds he the far rush of the mighty whale, which even now with open mouth is cleaving the SEAS after him.
+2. Chapter 121, Paragraph 4 (score 2.431819, docid 2294)
+What's the mighty difference between holding a mast's lightning-rod in the STORM, and standing close by a mast that hasn't got any lightning-rod at all in a STORM?
+
+2 results of 650 shown (took 0.002139 seconds)
+
+&gt; "dark blue ocean"
+
+1. Chapter 35, Paragraph 11 (score 4.953089, docid 745)
+"Roll on, thou deep and DARK BLUE OCEAN, roll!  Ten thousand blubber-hunters sweep over thee in vain."
+
+1 results of 1 shown (took 0.002945 seconds)</div></pre>
+    
+    <p>And that concludes our tour.</p>
+  </body>
+</html>

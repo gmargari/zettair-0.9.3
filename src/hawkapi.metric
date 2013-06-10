@@ -1,0 +1,26 @@
+# hawkapi.metric is a functional description in our funny zettair metric
+# language (see metric.py) of how the 'AF1' metric should operate.  
+#
+# AF1 is Dave Hawking's anchor-text specific okapi variant (see 'Toward better
+# weighting of anchors', Hawking, Upstill and Craswell, SIGIR 2004 poster).
+# They called it 'AF1', but i find hawkapi a little less boring ;o).
+# It's basically a stripped-down version of the okapi metric.  No-one
+# really knows, at this stage (including Dave Hawking), what a good
+# value of alpha is.  
+#
+# written nml 2005-07-18
+
+parameter float alpha;
+parameter float k3;
+
+decode() {
+	const float w_t = (float) logf((N - f_t + 0.5F) / (f_t + 0.5F));
+	const float w_qt = ((k3 + 1) * f_qt) / (k3 + f_qt);
+
+	accumulator += w_qt * alpha * ((float) logf(f_dt + 1)) * w_t;
+}
+
+post() {
+
+}
+

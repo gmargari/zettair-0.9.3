@@ -1,0 +1,30 @@
+# @VERBOSE
+@SEED 40
+
+# NOTE: zlib has by default an 8K internal buffer; you have to put in enough
+# input to "flood" this in order to get to the FULL state.
+ZERO_THRESHOLD
+# threshold object-size
+BIG_STUFF 10 15
+# threshold num-inputs
+ZERO_LEN_INPUTS 1 60000
+ONE_LEN_INPUTS 5 100
+# threshold num-inputs max-length
+ONCE_FULL_ALWAYS_FULL 20 100 1500
+ONCE_FINISHED_NOT_WRITEABLE 1000 100 150
+
+@INPUT /usr/share/dict/words
+
+ZERO_THRESHOLD
+# threshold object-size
+BIG_STUFF 10 15
+# threshold num-inputs
+ZERO_LEN_INPUTS 1 60000
+ONE_LEN_INPUTS 5 100
+# threshold num-inputs max-length
+ONCE_FULL_ALWAYS_FULL 20 100 1500
+ONCE_FINISHED_NOT_WRITEABLE 1000 100 150
+ONCE_FINISHED_NOT_WRITEABLE 4000 2000 20
+ONCE_FINISHED_NOT_WRITEABLE 8000 8000 12
+ONCE_FINISHED_NOT_WRITEABLE 8000 200 400
+NULL_BUF_TEST

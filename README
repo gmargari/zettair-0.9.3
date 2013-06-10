@@ -1,0 +1,12 @@
+zettair is a compact and fast text search engine produced by the Search Engine 
+Group at RMIT.  It was designed for simplicity as well as speed and flexibility.  
+One of its primary features is the ability to handle large amounts of text 
+efficiently.  It was previously named lucy, and was renamed around
+May, 2004.
+
+Installation instructions can be found the file named INSTALL.  zettair was
+written in C and has been tested on Solaris and Linux.  It is available for 
+download from http://www.seg.rmit.edu.au and is licensed under the GPL.
+
+Please send feedback/bug reports to zettair@cs.rmit.edu.au 
+

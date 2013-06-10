@@ -1,0 +1,38 @@
+# okapi_k3.metric is a functional description in our funny zettair metric
+# language (see metric.py) of how the okapi metric should operate.  
+#
+# The okapi metric is probably best described in 
+# 'A probabalistic model of information retrieval: development and
+# comparative experiments' parts 1 & 2, by Sparck Jones, Walker and
+# Robertson, although it was (i believe) first presented in 
+# 'Okapi at TREC-7: Automatic ad hoc, filtering, VLC and interactive track'  
+# by Robertson, Walker, and Beaulieu.
+#
+# written nml 2005-07-18
+
+parameter float k1;
+parameter float k3;
+parameter float b;
+
+decode() {
+    float w_t;   /* weight of term */
+    float r_dt;  /* weight of term in document */
+	float r_qt = ((k3 + 1) * f_qt) / (k3 + f_qt);
+
+    w_t = (float) logf((N - f_t + 0.5F) / (f_t + 0.5F));
+    /* fix for okapi bug, w_t shouldn't be 0 or negative. */
+    if (w_t <= 0.0F) {
+        /* use a very small increment instead */
+        w_t = FLT_EPSILON;  
+    }
+
+    r_dt = (((k1 + 1) * f_dt) 
+      / (k1 * ((1 - b) + ((b * D_terms) / (float) avg_D_terms)) + f_dt));
+
+    accumulator += r_dt * w_t * r_qt;
+}
+
+post() {
+
+}
+

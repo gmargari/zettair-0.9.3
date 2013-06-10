@@ -1,0 +1,18 @@
+from distutils.core import setup, Extension
+
+zet_module = Extension('zet', 
+        include_dirs = ['include', 'src/include', 'src/include/@OSINCLUDE@',
+        'src/include/compat' ],
+        libraries = ['zet'],
+        # FIXME next should be @libdir@, but configure replaces this
+        # with the Makefile variable ${exec_prefix}.  The following
+        # is a hack, which will not work if exec_prefix != prefix
+        library_dirs = ['@prefix@/lib'],
+        sources = ['src/pyzet/zetmodule.c'])
+
+setup (name = 'PyZettair',
+       version = '0.6.0',
+       package_dir = { '': 'src/pyzet' },
+       description = 'This is a python wrapper for libzet',
+       py_modules = ["pzet"],
+       ext_modules = [zet_module])

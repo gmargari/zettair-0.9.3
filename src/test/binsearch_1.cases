@@ -1,0 +1,40 @@
+# this file contains unit tests for the binsearch module.  See binsearch_1.c for
+# more details.
+#
+# apart from comments, it accepts lines of the form: 
+# 
+#   nel seed
+#
+# where nel and seed are both unsigned integers, indicating the number
+# of elements and a random seed to apply when sorting.  These tests
+# proceed by using the heap to perform a heapsort and then testing
+# whether its correctly sorted.
+#
+# written nml 2003-02-25
+
+10000 0
+10000 1
+10000 2
+10000 3
+10000 4
+10000 5
+10000 6
+10000 7
+10000 8
+10000 9
+
+10000 29234
+10000 43977
+10000 12785
+10000 52609
+10000 12097
+10000 09789
+
+# check out some time generated numbers
+20000
+20000
+20000
+20000
+20000
+20000
+

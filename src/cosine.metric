@@ -1,0 +1,23 @@
+# cosine.metric is a functional description in our funny zettair metric
+# language (see metric.py) of how the cosine metric should operate.  
+#
+# This cosine metric is the most basic metric available, in order to
+# provide symmetry and to ensure that the weights are meaningful.
+# Thus, we simply calculate the cosine of the angle between a document
+# and query, where each term is a dimension, and the number of
+# occurrances of that term, slightly mangled with a log, is the distance in 
+# that dimension.  
+#
+# This metric should probably only be used when the query really is a
+# document.
+#
+# written nml 2005-07-18
+
+decode() {
+	accumulator += (1 + (float) logf(f_qt)) * (1 + (float) logf(f_dt));
+}
+
+post() {
+    accumulator /= (float) (D_weight * Q_weight);
+}
+

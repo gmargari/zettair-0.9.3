@@ -1,0 +1,592 @@
+# stack_1.cases is a test suite for the stack module.  See stack_1.c
+# for more details
+#
+# written nml 2004-07-26
+
+new
+	case_1 0
+pop
+	0 enoent
+push
+	0 ok
+push
+	1 ok
+pop 
+	1 ok
+pop 
+	0 ok
+
+# empty again
+pop
+	0 enoent
+
+# two pushes, one pop
+push 
+	0 ok
+push 
+	1 ok
+pop 
+	1 ok
+push
+	2 ok
+push 
+	3 ok
+pop 
+	3 ok
+push
+	4 ok
+push 
+	5 ok
+pop 
+	5 ok
+push
+	6 ok
+push 
+	7 ok
+pop 
+	7 ok
+push
+	8 ok
+push 
+	9 ok
+pop 
+	9 ok
+ls
+	5
+		0
+		2
+		4
+		6
+		8
+
+# two pops, one push
+pop
+	8 ok
+pop 
+	6 ok
+push
+	10 ok
+pop
+	10 ok
+pop 
+	4 ok
+push 
+	11 ok
+pop 
+	11 ok
+pop 
+	2 ok
+push 
+	12 ok
+pop 
+	12 ok
+pop 
+	0 ok
+ls
+	0
+
+# automated test
+push
+	0 ok
+push
+	1 ok
+push
+	2 ok
+push
+	3 ok
+push
+	4 ok
+push
+	5 ok
+push
+	6 ok
+push
+	7 ok
+push
+	8 ok
+push
+	9 ok
+push
+	10 ok
+push
+	11 ok
+push
+	12 ok
+push
+	13 ok
+push
+	14 ok
+push
+	15 ok
+push
+	16 ok
+push
+	17 ok
+push
+	18 ok
+push
+	19 ok
+push
+	20 ok
+push
+	21 ok
+push
+	22 ok
+push
+	23 ok
+push
+	24 ok
+push
+	25 ok
+push
+	26 ok
+push
+	27 ok
+push
+	28 ok
+push
+	29 ok
+push
+	30 ok
+push
+	31 ok
+push
+	32 ok
+push
+	33 ok
+push
+	34 ok
+push
+	35 ok
+push
+	36 ok
+push
+	37 ok
+push
+	38 ok
+push
+	39 ok
+push
+	40 ok
+push
+	41 ok
+push
+	42 ok
+push
+	43 ok
+push
+	44 ok
+push
+	45 ok
+push
+	46 ok
+push
+	47 ok
+push
+	48 ok
+push
+	49 ok
+push
+	50 ok
+push
+	51 ok
+push
+	52 ok
+push
+	53 ok
+push
+	54 ok
+push
+	55 ok
+push
+	56 ok
+push
+	57 ok
+push
+	58 ok
+push
+	59 ok
+push
+	60 ok
+push
+	61 ok
+push
+	62 ok
+push
+	63 ok
+push
+	64 ok
+push
+	65 ok
+push
+	66 ok
+push
+	67 ok
+push
+	68 ok
+push
+	69 ok
+push
+	70 ok
+push
+	71 ok
+push
+	72 ok
+push
+	73 ok
+push
+	74 ok
+push
+	75 ok
+push
+	76 ok
+push
+	77 ok
+push
+	78 ok
+push
+	79 ok
+push
+	80 ok
+push
+	81 ok
+push
+	82 ok
+push
+	83 ok
+push
+	84 ok
+push
+	85 ok
+push
+	86 ok
+push
+	87 ok
+push
+	88 ok
+push
+	89 ok
+push
+	90 ok
+push
+	91 ok
+push
+	92 ok
+push
+	93 ok
+push
+	94 ok
+push
+	95 ok
+push
+	96 ok
+push
+	97 ok
+push
+	98 ok
+push
+	99 ok
+
+ls
+	100
+		0
+		1
+		2
+		3
+		4
+		5
+		6
+		7
+		8
+		9
+		10
+		11
+		12
+		13
+		14
+		15
+		16
+		17
+		18
+		19
+		20
+		21
+		22
+		23
+		24
+		25
+		26
+		27
+		28
+		29
+		30
+		31
+		32
+		33
+		34
+		35
+		36
+		37
+		38
+		39
+		40
+		41
+		42
+		43
+		44
+		45
+		46
+		47
+		48
+		49
+		50
+		51
+		52
+		53
+		54
+		55
+		56
+		57
+		58
+		59
+		60
+		61
+		62
+		63
+		64
+		65
+		66
+		67
+		68
+		69
+		70
+		71
+		72
+		73
+		74
+		75
+		76
+		77
+		78
+		79
+		80
+		81
+		82
+		83
+		84
+		85
+		86
+		87
+		88
+		89
+		90
+		91
+		92
+		93
+		94
+		95
+		96
+		97
+		98
+		99
+
+pop
+	99 ok
+pop
+	98 ok
+pop
+	97 ok
+pop
+	96 ok
+pop
+	95 ok
+pop
+	94 ok
+pop
+	93 ok
+pop
+	92 ok
+pop
+	91 ok
+pop
+	90 ok
+pop
+	89 ok
+pop
+	88 ok
+pop
+	87 ok
+pop
+	86 ok
+pop
+	85 ok
+pop
+	84 ok
+pop
+	83 ok
+pop
+	82 ok
+pop
+	81 ok
+pop
+	80 ok
+pop
+	79 ok
+pop
+	78 ok
+pop
+	77 ok
+pop
+	76 ok
+pop
+	75 ok
+pop
+	74 ok
+pop
+	73 ok
+pop
+	72 ok
+pop
+	71 ok
+pop
+	70 ok
+pop
+	69 ok
+pop
+	68 ok
+pop
+	67 ok
+pop
+	66 ok
+pop
+	65 ok
+pop
+	64 ok
+pop
+	63 ok
+pop
+	62 ok
+pop
+	61 ok
+pop
+	60 ok
+pop
+	59 ok
+pop
+	58 ok
+pop
+	57 ok
+pop
+	56 ok
+pop
+	55 ok
+pop
+	54 ok
+pop
+	53 ok
+pop
+	52 ok
+pop
+	51 ok
+pop
+	50 ok
+pop
+	49 ok
+pop
+	48 ok
+pop
+	47 ok
+pop
+	46 ok
+pop
+	45 ok
+pop
+	44 ok
+pop
+	43 ok
+pop
+	42 ok
+pop
+	41 ok
+pop
+	40 ok
+pop
+	39 ok
+pop
+	38 ok
+pop
+	37 ok
+pop
+	36 ok
+pop
+	35 ok
+pop
+	34 ok
+pop
+	33 ok
+pop
+	32 ok
+pop
+	31 ok
+pop
+	30 ok
+pop
+	29 ok
+pop
+	28 ok
+pop
+	27 ok
+pop
+	26 ok
+pop
+	25 ok
+pop
+	24 ok
+pop
+	23 ok
+pop
+	22 ok
+pop
+	21 ok
+pop
+	20 ok
+pop
+	19 ok
+pop
+	18 ok
+pop
+	17 ok
+pop
+	16 ok
+pop
+	15 ok
+pop
+	14 ok
+pop
+	13 ok
+pop
+	12 ok
+pop
+	11 ok
+pop
+	10 ok
+pop
+	9 ok
+pop
+	8 ok
+pop
+	7 ok
+pop
+	6 ok
+pop
+	5 ok
+pop
+	4 ok
+pop
+	3 ok
+pop
+	2 ok
+pop
+	1 ok
+pop
+	0 ok

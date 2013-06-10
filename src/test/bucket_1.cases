@@ -1,0 +1,575 @@
+# this file contains unit tests for the bucket module.  see bucket_1.c
+# for more details.
+#
+# commands:
+#
+#   # comment
+#
+#   new
+#   buckettype size fullsize
+#
+#   add
+#   term veclen succeed
+#
+#   ls
+#   numterms [term veclen vector]*
+#
+#   set
+#   term veclen vector
+#
+#   realloc 
+#   term newlen succeed
+#
+#   rm 
+#   term succeed
+#
+#   print
+#
+# written nml 2003-10-20
+      
+# bucket strategy 1
+
+# add to bucket until full
+new
+    case_1_1 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+add
+    bar 7 1
+add
+    bang 6 1
+add
+    hash 6 1
+# bucket is now full, if we try and add to it we should fail
+add
+    b 0 0
+# set all vectors
+set
+    the 7 1111111
+set
+    and 7 2222222
+set 
+    blah 6 333333
+set
+    foo 7 4444444
+set
+    bar 7 5555555
+set
+    bang 6 666666
+set
+    hash 6 777777
+ls 
+    7
+    the 7 1111111
+    and 7 2222222
+    blah 6 333333
+    foo 7 4444444
+    bar 7 5555555
+    bang 6 666666
+    hash 6 777777
+
+
+# fill bucket to fullsize (test fullsize vs size)
+new
+    case_1_2 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+add
+    bar 7 1
+add
+    bang 6 1
+add
+    hash 6 1
+# bucket is now full, if we try and add to it we should fail
+add
+    b 0 0
+# set all vectors
+set
+    the 7 1111111
+set
+    and 7 2222222
+set 
+    blah 6 333333
+set
+    foo 7 4444444
+set
+    bar 7 5555555
+set
+    bang 6 666666
+set
+    hash 6 777777
+ls 
+    7
+    the 7 1111111
+    and 7 2222222
+    blah 6 333333
+    foo 7 4444444
+    bar 7 5555555
+    bang 6 666666
+    hash 6 777777
+
+
+# fill bucket and then remove them in the same order
+new
+    case_1_3 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+add
+    bar 7 1
+add
+    bang 6 1
+add
+    hash 6 1
+# set all vectors
+set
+    the 7 1111111
+set
+    and 7 2222222
+set 
+    blah 6 333333
+set
+    foo 7 4444444
+set
+    bar 7 5555555
+set
+    bang 6 666666
+set
+    hash 6 777777
+ls 
+    7
+    the 7 1111111
+    and 7 2222222
+    blah 6 333333
+    foo 7 4444444
+    bar 7 5555555
+    bang 6 666666
+    hash 6 777777
+rm 
+    the 1
+rm
+    and 1
+rm
+    blah 1
+rm
+    foo 1
+rm
+    bar 1
+rm
+    bang 1
+rm
+    hash 1
+ls 
+	0
+
+
+# fill bucket and then remove them in reverse order
+new
+    case_1_4 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+add
+    bar 7 1
+add
+    bang 6 1
+add
+    hash 6 1
+# set all vectors
+set
+    the 7 1111111
+set
+    and 7 2222222
+set 
+    blah 6 333333
+set
+    foo 7 4444444
+set
+    bar 7 5555555
+set
+    bang 6 666666
+set
+    hash 6 777777
+ls 
+    7
+    the 7 1111111
+    and 7 2222222
+    blah 6 333333
+    foo 7 4444444
+    bar 7 5555555
+    bang 6 666666
+    hash 6 777777
+rm
+    hash 1
+rm
+    bang 1
+rm
+    bar 1
+rm
+    foo 1
+rm
+    blah 1
+rm
+    and 1
+rm 
+    the 1
+ls 
+	0
+
+
+# fill bucket and then remove them in random order
+new
+    case_1_5 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+add
+    bar 7 1
+add
+    bang 6 1
+add
+    hash 6 1
+# set all vectors
+set
+    the 7 1111111
+set
+    and 7 2222222
+set 
+    blah 6 333333
+set
+    foo 7 4444444
+set
+    bar 7 5555555
+set
+    bang 6 666666
+set
+    hash 6 777777
+ls 
+    7
+    the 7 1111111
+    and 7 2222222
+    blah 6 333333
+    foo 7 4444444
+    bar 7 5555555
+    bang 6 666666
+    hash 6 777777
+rm
+    blah 1
+rm
+    foo 1
+rm 
+    the 1
+rm
+    and 1
+rm
+    hash 1
+rm
+    bang 1
+rm
+    bar 1
+ls 
+	0
+
+
+# add to bucket until full
+new
+    case_1_6 1 100 
+add
+    the 7 1
+add
+    and 3 1
+add
+    blah 6 1
+add
+    foo 16 1
+add
+    bar 7 1
+add
+    bang 2 1
+add
+    hash 5 1
+# set all terms 
+set
+    the 7 1111111
+set
+    and 3 222
+set
+    blah 6 333333
+set
+    foo 16 4444444444444444
+set
+    bar 7 5555555
+set
+    bang 2 66
+set
+    hash 5 77777
+ls
+    7
+    the 7 1111111
+    and 3 222
+    blah 6 333333
+    foo 16 4444444444444444
+    bar 7 5555555
+    bang 2 66
+    hash 5 77777
+
+
+# use terms with common prefix
+new
+	case_1_7 1 100
+add
+	their 4 1
+add
+	the 3 1
+add
+	there 2 1
+add
+	thesis 1 1
+add
+	theology 3 1
+add 
+	ther 2 1
+add
+	through 3 1
+add
+	th 1 1
+set
+	their 4 1111
+set
+	the 3 222
+set
+	there 2 33
+set
+	thesis 1 4
+set
+	theology 3 555
+set 
+	ther 2 66
+set
+	through 3 777
+set
+	th 1 8
+ls
+	8
+	their 4 1111
+	the 3 222
+	there 2 33
+	thesis 1 4
+	theology 3 555
+	ther 2 66
+	through 3 777
+	th 1 8
+
+# add to bucket until full
+new
+    case_1_8 1 100 
+add
+    the 7 1
+add
+    and 7 1
+add
+    blah 6 1
+add
+    foo 7 1
+# growing realloc 
+realloc
+    the 10 1
+# growing realloc 
+realloc
+    and 15 1
+#growing realloc 
+realloc
+    and 37 1
+realloc
+	foo 8 1
+set 
+	foo 8 22222222
+#growing realloc 
+realloc
+    and 45 1
+# realloc to same size
+realloc
+	foo 8 1
+# shrinking realloc 
+realloc
+    blah 3 1
+# shrinking realloc 
+realloc
+	and 36 1
+#shrinking first realloc
+realloc
+	and 10 1
+set
+    the 10 1111111111
+set
+	and 10 4444444444
+set 
+    blah 3 333
+ls
+	4
+	and 10 4444444444
+    blah 3 333
+	foo 8 22222222
+    the 10 1111111111
+
+# test data preservation during reallocation
+new
+    case_1_9 1 100 
+add
+    the 7 1
+set
+	the 7 1111111
+add
+    and 7 1
+set
+    and 7 2222222
+add
+    blah 6 1
+set
+    blah 6 333333
+add
+    foo 7 1
+set
+    foo 7 4444444
+# growing realloc 
+realloc
+    the 10 1
+match
+	the 7 1111111
+match
+	and 7 2222222
+match
+	foo 7 4444444
+match
+	blah 6 333333
+set
+	the 10 1111111111
+# growing realloc 
+realloc
+    and 15 1
+match
+	the 10 1111111111
+match
+	and 7 2222222
+match
+	foo 7 4444444
+match
+	blah 6 333333
+set
+	and 15 222222222222222
+# growing realloc 
+realloc
+    and 37 1
+match
+	the 10 1111111111
+match
+	and 15 222222222222222
+match
+	foo 7 4444444
+match
+	blah 6 333333
+set
+	and 37 2222222222222222222222222222222222222
+realloc
+	foo 8 1
+match
+	the 10 1111111111
+match
+	and 37 2222222222222222222222222222222222222
+match
+	foo 7 4444444
+match
+	blah 6 333333
+set 
+	foo 8 44444444
+# growing realloc 
+realloc
+    and 45 1
+match
+	the 10 1111111111
+match
+	and 37 2222222222222222222222222222222222222
+match
+	foo 8 44444444
+match
+	blah 6 333333
+set
+	and 45 222222222222222222222222222222222222222222222
+# realloc to same size
+realloc
+	foo 8 1
+match
+	the 10 1111111111
+match
+	and 45 222222222222222222222222222222222222222222222
+match
+	foo 8 44444444
+match
+	blah 6 333333
+# shrinking realloc 
+realloc
+    blah 3 1
+match
+	the 10 1111111111
+match
+	and 45 222222222222222222222222222222222222222222222
+match
+	foo 8 44444444
+match
+	blah 3 333
+# shrinking realloc 
+realloc
+	and 36 1
+match
+	the 10 1111111111
+match
+	and 36 222222222222222222222222222222222222
+match
+	foo 8 44444444
+match
+	blah 3 333
+# shrinking first realloc
+realloc
+	and 10 1
+match
+	the 10 1111111111
+match
+	and 10 2222222222
+match
+	foo 8 44444444
+match
+	blah 3 333
+ls
+	4
+	and 10 2222222222
+	blah 3 333
+	foo 8 44444444
+	the 10 1111111111
+

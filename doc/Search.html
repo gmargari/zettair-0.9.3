@@ -1,0 +1,427 @@
+<html>
+  <head>
+    <title>Index Search</title>
+  </head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <body bgcolor="#ffffff">
+    <p>This page documents how you can use Zettair to query an inverted 
+    index.  There are two executables that can be used for querying indexes
+    build by <a href="Build.html" target="mainContent">Zettair</a>:
+    <ul>
+      <li><a href="#QUERY"><span class="program-name">zet</span></a> Used for 
+      general querying</li>
+      <li><a href="#TRECQUERY"><span class="program-name">zet_trec</span></a> 
+      Used for TREC experiments.  The input is a TREC topic file, and the 
+      output is in a format that can be used with the 
+      <a href="ftp://ftp.cs.cornell.edu/pub/smart/"><span
+          class="program-name">trec_eval</span></a> program.
+      </li>            
+    </ul>
+    </p>
+
+    <h1>Metric Options</h1>
+    <p>
+      These can be used with either zet or zet_trec to change the
+      similarity metric used by Zettair.
+    </p>
+
+    <ul>
+      <li>
+      <span class="option-flag">--okapi</span>
+      <p class="option-explanation">
+      Use the Okapi BM25 metric.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-1,--k1=<span
+          class="option-argument">floatnum</span></span>
+      <p class="option-explanation">
+      Set the k1 parameter for the Okapi BM25 metric to the specified
+      floating point value.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-b,--b=<span
+          class="option-argument">floatnum</span></span>
+      <p class="option-explanation">
+      Set the b parameter for the Okapi BM25 metric to the specified
+      floating point value.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-3,--k3=<span
+          class="option-argument">floatnum</span></span>
+      <p class="option-explanation">
+      Set the k3 parameter for the Okapi BM25 metric to the specified
+      floating point value.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--pivoted-cosine=<span
+          class="option-argument">floatnum</span></span>
+      <p class="option-explanation">
+      Use the pivoted cosine metric, with the pivot provided as a
+      floating point value.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--cosine</span>
+      <p class="option-explanation">
+      Use the cosine metric.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--hawkapi=<span
+          class="option-argument">floatnum</span></span>
+      <p class="option-explanation">
+      Use Dave Hawking's adaptation of the Okapi BM25 metric, with the
+      alpha value provided as a floating point number.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--anh-impact</span>
+      <p class="option-explanation">
+      Use Anh and Moffat's impact-ordered evaluation,  including
+      separate metric.  --anh-impact must have been used when building
+      the index in order to employ impact-ordered query evaluation.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--dirichlet=<span
+          class="option-argument">uintnum</span></span>
+      <p class="option-explanation">
+      Use the Dirichlet-smoothed, query-likelihood language modelling
+      metric with mu value given as an unsigned integer.
+      </p>
+      </li>
+    </ul>
+
+    <h1>Index Search</h1>
+    <a name="QUERY"></a>
+    <p>
+    Usage: <span class="usage">zet [query1 ... queryN]</span>
+    </p>
+    <p>
+    Index querying options:<br>
+    <ul class="option-list">
+      <li>
+      <span class="option-flag">-f <span
+          class="option-argument">prefix</span></span>
+      <p class="option-explanation">
+      Give the name of the index to use.  If no name is given then
+      'index' is used by default.  The prefix may contain directory
+      path elements.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-n <span 
+          class="option-argument">results</span></span>
+      <p class="option-explanation">
+      Sets the maximum number of results returned in response to each
+      query.  The default is 20.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--query-list=<span 
+          class="option-argument">filename</span></span>
+      <p class="option-explanation">
+      Instructs Zettair to read queries from the given file, instead
+      of from stdin.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--query-stop<span 
+          class="option-argument">=[filename]</span></span>
+      <p class="option-explanation">
+      Uses the words contained in the given filename as stop words
+      (not evaluated) during querying.  If no filename is given, a
+      default stop list is loaded.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--big-and-fast</span>
+      <p class="option-explanation">
+      Instructs Zettair to use approximately 500MB of memory while
+      querying.  The default memory usage should be around 20MB.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-b <span 
+          class="option-argument">first_result</span></span>
+      <p class="option-explanation">
+      Sets the number of results to skip for each query.  This can be
+      useful in obtaining more results for a query without repeating
+      those already obtained.  The default is 0.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">--summary={ plain | capitalise | tag | 
+        none }</span>
+      <p class="option-explanation">Choose the type of document 
+      summarisation to perform. <span class="option-flag">none</span>
+      means do not provide document summaries with the query results;
+      this is the default.  The other alternatives specify how to
+      highlight the search terms in the summary.  
+      <span class="option-flag">plain</span> specifies not 
+      to highlight the search terms.  <span class="option-flag">capitalise</span>
+      highlights the search terms by capitalising them.
+      <span class="option-flag">tag</span> highlights them by 
+      surrounding them with <span class="output-name">&lt;b&gt;</span> 
+      tags.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag"><span
+          class="option-argument">query1 ... queryN</span></span>
+      <p class="option-explanation">
+      For searching, the given queries (query1 ... queryN) 
+      are <a href="http://www.google.com/">Google-like</a> queries that 
+      are used to search the index. Queries consist of keywords and 
+      phrases (represented <span class="input-word">"like this"</span>) 
+      optionally separated by the 
+      operators <span class="input-word">AND</span> and 
+      <span class="input-word">OR</span> (operators MUST be 
+      capitalised). The default operator is 
+      <span class="input-word">OR</span>. Search is case-insensitive, 
+      except for recognition of <span class="input-word">AND</span> 
+      and <span class="input-word">OR</span>.  Stopping and stemming are 
+      not performed.  All results are ranked by relevance. Note that 
+      the Google operator '<span class="input-word">-</span>' 
+      and modifiers are not currently supported.
+      </p>
+
+      <p class="option-explanation">
+      If no queries are found in the command line, Zettair will start in 
+      interactive mode.  In this mode queries are read from standard
+      input and executed.  Interactive mode exits once it can no longer
+      read from standard input.  You can cause it to exit by entering
+      the end-of-file control character, typically 
+      <span class="shell-name">control-d</span>.
+      </p>
+      </li>
+
+      <li>
+      <span class="option-flag">-v</span>
+      <p class="option-explanation">print version information</p>
+
+      <li>
+      <span class="option-flag">-h</span>
+      <p class="option-explanation">print a help message</p>
+      </UL>
+
+      <p>Sample Command Line:</p>
+
+      <div class="shell-command">zet -n 10 -f disk45</div>
+
+      <p>
+      Example queries:
+      <ul class="query-list">
+        <li><span class="sample-query">mail configuration</span> 
+        <div class="query-explanation">searches for the word 'mail' and the word
+          'configuration'.  Pages returned can have either word, or both 
+          (<span class="input-word">OR</span> query) in upper, lower or 
+          mixed case.</div>
+        </li>
+        <li>
+        <span class="sample-query">mail AND configuration</span> 
+        <div class="query-explanation">searches for pages that have the 
+          words 'mail' and 'configuration' in them.</div>
+        </li>
+        <li>
+        <span class="sample-query">shakespeare "to be or not to be"</span>
+        <div class="query-explanation">searches for the word 'shakespeare' and 
+          the phrase 'to be or not to be'.</div>
+        </li>
+      </ul>
+      </p>
+
+      <p>
+      Note that if you are entering queries at the command line, you will 
+      probably have to escape (using the backslash or other means) double 
+      quotes for phrases. e.g. 
+      <div class="shell-command">
+        &gt; zet "this is a query \"with a phrase\""
+      </div>
+      </p>
+
+      <h1>TREC Index Search</h1>
+      <a name="TRECQUERY"></a>
+      <p>
+      Usage: <span class="usage">zet_trec index</span>
+      </p>
+
+      <p>
+      TREC querying options:<br>
+      <ul class="option-list">
+        <li>
+        <span class="option-flag">-f,--file=<span
+            class="option-argument">topic_file</span></span>
+        <p class="option-explanation">
+        Add TREC <span class="option-argument">topic_file</span> to list 
+        of topic files to process.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-F,--file-list=<span 
+            class="option-argument">file</span></span>
+        <p class="option-explanation">
+        Add files listed in <span class="option-argument">file</span> to 
+        list of topic files to process
+        </p>
+
+        <li>
+        <span class="option-flag">-r,--runid=<span
+            class="option-argument">run_id</span></span>
+        <p class="option-explanation">
+        Output <span class="option-argument">run_id</span> as id for 
+        this evaluation (run_id is a text field 
+        in <a href="ftp://ftp.cs.cornell.edu/pub/smart/"><span
+            class="program-name">trec_eval</span></a> 
+        output)
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-n,--number-results=<span
+            class="option-argument">results</span></span>
+        <p class="option-explanation">
+        Number of results to output per query.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-t,--title</span>
+        <p class="option-explanation">
+        Use topic titles in queries (this is the default if none of
+        -t, -a or -d are specified).
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-d,--description</span>
+        <p class="option-explanation">
+        Use topic descriptions in queries.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-a,--narrative</span>
+        <p class="option-explanation">
+        Use topic narratives in queries.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--print-queries</span>
+        <p class="option-explanation">
+        Print queries to stderr as they are constructed from the topic
+        file and resolved.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--timing</span>
+        <p class="option-explanation">
+        Print the total time taken in querying to stderr after all
+        topics have been resolved.  The time printed excludes index
+        loading time.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--dummy</span>
+        <p class="option-explanation">
+        Insert dummy entries for topics that have no answers in the
+        results set.  This has been required for TREC terabyte submissions in the past.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--non-stop</span>
+        <p class="option-explanation">
+        Don't stop if a query cannot be constructed from a topic.
+        Useful when running large, noisy query logs.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--query-stop<span 
+            class="option-argument">=[filename]</span></span>
+        <p class="option-explanation">
+        Uses the words contained in the given filename as stop words
+        (not evaluated) during querying.  If no filename is given, a
+        default stop list is loaded.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--big-and-fast</span>
+        <p class="option-explanation">
+        Instructs Zettair to use approximately 500MB of memory while
+        querying.  The default memory usage should be around 20MB.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">--qrels=<span
+            class="option-argument">=[filename]</span></span>
+        <p class="option-explanation">
+        Instead of printing search results in TREC format, the results
+        are evaluated against the given Qrels file, in TREC Qrel
+        format, and trec_eval-like output is produced.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag"><span
+            class="option-argument">index</span></span>
+        <p class="option-explanation">
+        The name of the index that is queried using the TREC topic files.
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-h,--help</span>
+        <p class="option-explanation">
+        Print help message
+        </p>
+        </li>
+
+        <li>
+        <span class="option-flag">-v,--version</span>
+        <p class="option-explanation">
+        Print version information
+        </p>
+        </li>
+      </ul>
+      </p>
+
+      <p>
+      Sample Command Line: 
+      </p>
+      <div class="shell-command">./zet_trec -f
+        /research/TREC-7/topics.351-400 -n 1000 disk45 &gt; query.log</div>
+      <p>
+      The file <span class="file-name">query.log</span> can then be evaluated 
+      with <span class="program-name">trec_eval</span> against
+      pre-prepared relevance judgements.
+      </p>
+
+    </body>
+  </html>

@@ -1,0 +1,192 @@
+<html>
+  <head>
+    <title>Zettair Index Build</title>
+  </head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <body bgcolor="#ffffff">
+
+  <h1>Zettair Index Build</h1>
+  <p>
+  Zettair can build inverted indexes by parsing different types of 
+  source collections.  Please read the format descriptions to understand 
+  fully how an index is constructed from the given data. Currently, the 
+  following index types are supported:
+
+  <ul>
+    <li><a href="#HTMLFORMAT">HTML</a></li>
+    <li><a HREF="#TRECFORMAT">TREC</a></li>            
+  </ul>
+  </p>
+
+  <p>
+  Usage: <span class="usage">zet -i file1 ...  fileN</span>
+  </p>
+
+  <p>Index construction options<br>
+
+  <ul class="option-list">
+    <li>
+    <span class="option-flag">-i,--index</span>
+    <p class="option-explanation">
+    Put Zettair into index construction mode (as opposed to <a
+      href="Search.html" target="mainContent">searching mode</a>).
+    </p>
+    </li>
+
+    <li><span class="option-flag"><span 
+        class="option-argument">file1 ... fileN</span></span>
+    <p class="option-explanation">
+    The given files (<span class="option-argument">file1 ... 
+      fileN</span>) are files to index for
+    searching.  If no files are given then a list of filenames, 
+    seperated by whitespace, is read from stdin.  This allows you to 
+    pipe a list of filenames to index in from a file or shell
+    command.  The command:
+    </p>
+    <div class="shell-command">find . -name "*.c" -or -name 
+      "*.h" | ./zet -i -f source_index</div>
+    <p class="option-explanation">
+    would find all files with c and h extensions and index them,
+    placing the result into a set of files that start with
+    source_index.
+    </p>
+    </li>
+
+    <li>
+    <span class="option-flag">-f,--filename <span
+        class="option-argument">prefix</span></span>
+    <p class="option-explanation">
+    give the name of the index to use.  If no name is given, 'index'
+    will be used as the default.  The prefix can include directory
+    path components.
+    </p>
+    </li>
+
+    <li>
+    <span class="option-flag">-c,--config <span
+        class="option-argument">config_file</span></span>
+    <p class="option-explanation">
+    use this configuration file for the parser.  The configuration
+    file determines which tags the parser attempts to extract text
+    from.  The format is a simple text file where the name of a tag
+    (minus the angled brackets) is followed by a number that
+    indicates whether parsing should be turned on or off after this
+    tag.  See config/psettings.xml for an example.
+    </p>
+    </li>
+
+    <li><span class="option-flag">--big-and-fast</span>
+    <p class="option-explanation">
+    causes zettair to use around 500MB of memory during indexing (by
+    default, around 20MB is used)
+    </p>
+    </li>
+
+    <li><span class="option-flag">-a,--add</span>
+    <p class="option-explanation">
+    allow zettair to add new postings to an existing index.  By
+    default, this causes an error.
+    </p>
+    </li>
+
+    <li>
+    <span class="option-flag">--stem<span
+        class="option-argument">{ none | eds | light | porters }</span></span>
+    <p class="option-explanation">
+    Use given stemming algorithm during index construction.  None is
+    no stemming.  eds removes 'e', 'ed', and 's'.
+    light is a custom stemmer that is fast, but slightly less
+    effective than Porter's stemming.
+    Porter's stemming is a slow, complex, well-known stemming algorithm.
+    </p>
+    </li>
+
+    <li>
+    <span class="option-flag">--anh-impact</span>
+    <p class="option-explanation">
+    Generate impact-ordered inverted lists during construction.  This
+    is required to use impact-ordered evaluation during querying.
+    </p>
+    </li>
+
+    <li><span class="option-flag">-t { TREC | HTML }</span>
+    <p class="option-explanation">
+    select the type of the index, TREC or HTML (default: autodetect)
+    </p>
+    </li>
+  </ul>
+  </p>
+
+  <p>
+  Sample Command Line: 
+  </p>
+  <div class="shell-command">zet -i -f disk45 -c
+    /research/zettair/config/parser_settings.trec -t TREC
+    /research/TREC/disk45/fbis /research/TREC/disk45/fr
+    /research/TREC/disk45/ft /research/TREC/disk45/latimes</div>
+  <p>
+  This command will use the TREC parser
+  to create an inverted index from the four listed files.
+  You should then find the following index files:
+  <ul>
+    <li><span class="file-name">disk45.map</span></li>
+    <li><span class="file-name">disk45.v.0</span></li>
+    <li><span class="file-name">disk45.param.0</span></li>
+    <li><span class="file-name">disk45.vocab.0</span></li>
+  </ul>
+  </p>
+
+  <h2><a name="FORMAT">Index Types</a></h2>
+  <h3><a name="HTMLFORMAT">HTML Format</a></h3>
+  <p>    
+  The HTML parser treats each file as one document in HTML format.  Text is
+  extracted from HTML documents according to the parser settings file,
+  documented above. 
+  </p>
+  <h3><a name="TRECFORMAT">TREC Format</a></h3>
+  <p>
+  It is often advantageous to combine several (thousand) documents in 
+  one file and be able to index and search on one single file rather 
+  than a few thousand files. This can be done by writing the information 
+  of several files into one file and formatting the one file in such a 
+  way that original document boundaries can be detected by the parser. 
+  The parser will extract words from the given file in much the same way 
+  as in <a href="#HTMLFORMAT">HTML</a> mode.  Additionally, the TREC 
+  parser looks for tags: <span class="input-word">&lt;DOC&gt;</span>
+  and <span class="input-word">&lt;/DOC&gt;</span> to signal the 
+  beginning or end of a document, and identifies the documents via their 
+  TREC document number, which is found between a 
+  <span class="input-word">&lt;DOCNO&gt;</span> and 
+  <span class="input-word">&lt;/DOCNO&gt;</span> tags.  
+  The TREC format is named as such because it is the format used by the 
+  <a href="http://trec.nist.gov">Text Retrieval Conference (TREC)</a> for
+  experimental data.
+  </p>
+
+  <p>
+  The following excerpt from the Bible represents, for instance, 
+  8 documents (of which 4 documents contain only one word).
+  </p>
+  <p>
+  <table bgcolor="#bbbbbb" border="0" width="100%">
+    <tr> 
+      <td>
+        <code>
+          &lt;DOC&gt; And the sons of Noah, that went forth of the ark, were Shem, and Ham,<br>
+          and Japheth: and Ham is the father of Canaan. &lt;/DOC&gt;<br>
+          &lt;DOC&gt; genesis &lt;/DOC&gt;<br>
+          &lt;DOC&gt; These are the three sons of Noah: and of them was the whole earth overspread.&lt;/DOC&gt;<br>
+          &lt;DOC&gt; genesis &lt;/DOC&gt;<br>
+          &lt;DOC&gt; And Noah began to be an husbandman, and he planted a vineyard:&lt;/DOC&gt;<br>
+          &lt;DOC&gt; genesis &lt;/DOC&gt;<br>
+          &lt;DOC&gt; And he drank of the wine, and was drunken; and he was uncovered within his tent.&lt;/DOC&gt;<br>
+          &lt;DOC&gt; genesis &lt;/DOC&gt;<br>
+        </code>
+      </td>
+      </tr><caption valign="bottom" align="left">TABLE 1: An excerpt of a 
+      TREC file</caption>
+  </table>
+  </p>
+
+  </body>
+</html>

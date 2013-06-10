@@ -1,0 +1,33 @@
+# this file contains unit tests for the heap module.  See heap_1.c for
+# more details.
+#
+# apart from comments, it accepts lines of the form: 
+# 
+#   nel seed
+#
+# where nel and seed are both unsigned integers, indicating the number
+# of elements and a random seed to apply when sorting.  These tests
+# proceed by using the heap to perform a heapsort and then testing
+# whether its correctly sorted.
+#
+# written nml 2003-02-25
+
+10000 0
+10000 1
+10000 2
+10000 3
+10000 4
+10000 5
+10000 6
+10000 7
+10000 8
+10000 9
+
+100000 29234
+100000 43977
+100000 12785
+100000 52609
+100000 12097
+100000 09789
+
+

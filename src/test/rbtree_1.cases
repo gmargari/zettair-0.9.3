@@ -1,0 +1,581 @@
+# rbtree_1.cases contains test cases for the red-black tree.  See
+# rbtree_1.c for more detail.  Test case syntax is:
+#
+#   # comments
+#   new name
+#   insert num datanum ret
+#   remove num ret
+#   find num datanum ret
+#   findinsert num datanum ret
+#   print order
+#   ls order numitems [num datanum]*
+#
+# written nml 2004-08-04
+	
+# simple test to ensure data values can differ from key values and to
+# test iteration orders over the tree
+new
+	case_1_1
+insert 
+	1 101 ok
+insert
+	2 102 ok
+insert
+	3 103 ok
+ls 
+	in 3
+	1 101
+	2 102
+	3 103
+ls 
+	pre 3
+	2 102
+	1 101
+	3 103
+ls
+	post 3
+	1 101
+	3 103
+	2 102
+ls 
+	rev_in 3
+	3 103
+	2 102
+	1 101
+ls 
+	rev_pre 3
+	2 102
+	3 103
+	1 101
+ls
+	rev_post 3
+	3 103
+	1 101
+	2 102
+
+# simple test case where things don't return ok
+new
+	case_1_2
+insert
+	1 1 ok
+insert 
+	2 2 ok
+insert
+	3 3 ok
+insert 
+	1 0 eexist
+insert 
+	2 0 eexist
+insert 
+	3 0 eexist
+remove
+	4 0 enoent
+remove 
+	100 0 enoent
+remove
+	2 2 ok
+remove
+	2 2 enoent
+remove
+	1 1 ok
+remove
+	1 1 enoent
+remove 
+	3 3 ok
+remove
+	3 3 enoent
+ls
+	in 0
+
+# simple example requiring rebalancing
+new 
+	case_2_1
+insert
+	1 1 ok
+insert
+	2 2 ok
+insert 
+	3 3 ok
+insert 
+	4 4 ok
+insert 
+	5 5 ok
+insert 
+	6 6 ok
+insert 
+	7 7 ok
+insert 
+	8 8 ok
+insert 
+	9 9 ok
+insert 
+	10 10 ok
+insert 
+	11 11 ok
+insert 
+	12 12 ok
+insert 
+	13 13 ok
+insert 
+	14 14 ok
+insert 
+	15 15 ok
+insert 
+	16 16 ok
+insert 
+	17 17 ok
+insert 
+	18 18 ok
+insert 
+	19 19 ok
+insert 
+	20 20 ok
+ls
+	in 20
+	1 1
+	2 2
+	3 3
+	4 4
+	5 5
+	6 6
+	7 7
+	8 8
+	9 9
+	10 10
+	11 11
+	12 12
+	13 13
+	14 14
+	15 15
+	16 16
+	17 17
+	18 18
+	19 19
+	20 20
+
+# mirror to case 2_1
+new 
+	case_2_2
+insert 
+	20 20 ok
+insert 
+	19 19 ok
+insert 
+	18 18 ok
+insert 
+	17 17 ok
+insert 
+	16 16 ok
+insert 
+	15 15 ok
+insert 
+	14 14 ok
+insert 
+	13 13 ok
+insert 
+	12 12 ok
+insert 
+	11 11 ok
+insert 
+	10 10 ok
+insert 
+	9 9 ok
+insert 
+	8 8 ok
+insert 
+	7 7 ok
+insert 
+	6 6 ok
+insert 
+	5 5 ok
+insert 
+	4 4 ok
+insert 
+	3 3 ok
+insert
+	2 2 ok
+insert
+	1 1 ok
+ls
+	in 20
+	1 1
+	2 2
+	3 3
+	4 4
+	5 5
+	6 6
+	7 7
+	8 8
+	9 9
+	10 10
+	11 11
+	12 12
+	13 13
+	14 14
+	15 15
+	16 16
+	17 17
+	18 18
+	19 19
+	20 20
+
+# case requiring slightly more complex rebalancing
+new 
+	case_2_3
+insert
+	10 10 ok
+insert
+	20 20 ok
+insert 
+	30 30 ok
+ls
+	in 3
+	10 10
+	20 20
+	30 30
+insert
+	11 11 ok
+insert
+	12 12 ok
+ls
+	in 5
+	10 10
+	11 11
+	12 12
+	20 20
+	30 30
+
+# mirror of 2_3
+new 
+	case_2_4
+insert
+	10 10 ok
+insert
+	20 20 ok
+insert 
+	30 30 ok
+ls
+	in 3
+	10 10
+	20 20
+	30 30
+insert
+	29 29 ok
+insert
+	28 28 ok
+ls
+	in 5
+	10 10
+	20 20
+	28 28
+	29 29
+	30 30
+
+# example from pg 282 'introduction to algorithms', cormen et al
+new
+	case_cormen_282
+insert
+	11 11 ok
+insert
+	2 2 ok
+insert
+	14 14 ok
+insert
+	1 1 ok
+insert
+	7 7 ok
+insert
+	15 15 ok
+insert
+	5 5 ok
+insert
+	8 8 ok
+insert
+	4 4 ok
+ls
+	in 9
+	1 1
+	2 2
+	4 4
+	5 5
+	7 7
+	8 8
+	11 11
+	14 14
+	15 15
+
+# simple deletion example requiring rebalancing
+new 
+	case_3_1
+insert
+	1 1 ok
+insert
+	2 2 ok
+insert 
+	3 3 ok
+insert 
+	4 4 ok
+insert 
+	5 5 ok
+insert 
+	6 6 ok
+insert 
+	7 7 ok
+insert 
+	8 8 ok
+insert 
+	9 9 ok
+insert 
+	10 10 ok
+insert 
+	11 11 ok
+insert 
+	12 12 ok
+insert 
+	13 13 ok
+insert 
+	14 14 ok
+insert 
+	15 15 ok
+insert 
+	16 16 ok
+insert 
+	17 17 ok
+insert 
+	18 18 ok
+insert 
+	19 19 ok
+insert 
+	20 20 ok
+remove
+	20 20 ok
+remove 
+	19 19 ok
+remove 
+	18 18 ok
+remove 
+	17 17 ok
+remove 
+	16 16 ok
+remove 
+	15 15 ok
+remove 
+	14 14 ok
+remove 
+	13 13 ok
+remove 
+	12 12 ok
+remove 
+	11 11 ok
+remove 
+	10 10 ok
+ls
+	in 9
+	1 1
+	2 2
+	3 3
+	4 4
+	5 5
+	6 6
+	7 7
+	8 8
+	9 9
+remove 
+	9 9 ok
+remove 
+	8 8 ok
+remove 
+	7 7 ok
+remove 
+	6 6 ok
+remove 
+	5 5 ok
+remove 
+	4 4 ok
+remove 
+	3 3 ok
+remove 
+	2 2 ok
+remove 
+	1 1 ok
+ls
+	in 0
+
+# another simple deletion example 
+new 
+	case_3_2
+insert
+	1 1 ok
+insert
+	2 2 ok
+insert 
+	3 3 ok
+insert 
+	4 4 ok
+insert 
+	5 5 ok
+insert 
+	6 6 ok
+insert 
+	7 7 ok
+insert 
+	8 8 ok
+insert 
+	9 9 ok
+insert 
+	10 10 ok
+insert 
+	11 11 ok
+insert 
+	12 12 ok
+insert 
+	13 13 ok
+insert 
+	14 14 ok
+insert 
+	15 15 ok
+insert 
+	16 16 ok
+insert 
+	17 17 ok
+insert 
+	18 18 ok
+insert 
+	19 19 ok
+insert 
+	20 20 ok
+remove
+	1 1 ok
+remove
+	2 2 ok
+remove 
+	3 3 ok
+remove 
+	4 4 ok
+remove 
+	5 5 ok
+remove 
+	6 6 ok
+remove 
+	7 7 ok
+remove 
+	8 8 ok
+remove 
+	9 9 ok
+remove 
+	10 10 ok
+remove 
+	11 11 ok
+remove 
+	12 12 ok
+remove 
+	13 13 ok
+remove 
+	14 14 ok
+remove 
+	15 15 ok
+remove 
+	16 16 ok
+remove 
+	17 17 ok
+remove 
+	18 18 ok
+remove 
+	19 19 ok
+remove 
+	20 20 ok
+ls 
+	in 0
+
+# a case testing out find_near
+new
+	case_3_3
+insert
+	5 5 ok
+insert
+	10 10 ok
+insert 
+	15 15 ok
+insert 
+	20 20 ok
+insert 
+	25 25 ok
+insert 
+	30 30 ok
+insert 
+	35 35 ok
+insert 
+	40 40 ok
+insert
+	45 45 ok
+insert 
+	50 50 ok
+# shouldn't find anything smaller than 5
+findnear
+	0 0 0 eexist
+findnear
+	4 0 0 eexist
+# should find 5 with 5 - 9
+findnear
+	5 5 5 ok
+findnear
+	6 5 5 ok
+findnear
+	7 5 5 ok
+findnear
+	9 5 5 ok
+findnear
+	10 10 10 ok
+# should find other sensibly
+findnear
+	11 10 10 ok
+findnear
+	15 15 15 ok
+findnear
+	16 15 15 ok
+findnear
+	20 20 20 ok
+findnear
+	21 20 20 ok
+findnear
+	25 25 25 ok
+findnear
+	26 25 25 ok
+findnear
+	30 30 30 ok
+findnear
+	31 30 30 ok
+findnear
+	35 35 35 ok
+findnear
+	36 35 35 ok
+findnear
+	40 40 40 ok
+findnear
+	41 40 40 ok
+findnear
+	45 45 45 ok
+findnear
+	46 45 45 ok
+findnear
+	50 50 50 ok
+# should find end entry with keys larger than anything in the table
+findnear
+	51 50 50 ok
+findnear
+	100 50 50 ok
+findnear
+	1000 50 50 ok
+
+# some random cases
+newrand
+	case_rand_failed_1 1091769637 10 2
+
+newrand
+	case_rand_1 time 500 1000
+
+newrand
+	case_rand_1 time 501 1000
+
+
+
