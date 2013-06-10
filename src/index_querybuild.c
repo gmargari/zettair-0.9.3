@@ -35,6 +35,10 @@ static pthread_mutex_t vocab_mutex = PTHREAD_MUTEX_INITIALIZER;
 /* maximum length of an in-vocab vector. */
 #define MAX_VOCAB_VECTOR_LEN 4096
 
+/*###*/ 
+#define PR_DBG_PRINT 1
+/*###*/
+
 /**
  *  Non-synchronized version of get_vocab_vector, i.e. we
  *  assume that, in a multi-threaded environment, the caller
@@ -410,6 +414,20 @@ unsigned int index_querybuild(struct index *idx, struct query *query,
             }
             retval = get_vocab_vector(idx->vocab, &entry, word, wordlen,
               vec_buf, sizeof(vec_buf), impacts);
+
+/*###*/if (PR_DBG_PRINT==1) {
+/*###*/    int j;
+/*###*/    printf("\"");
+/*###*/    for (j = 0; j < wordlen; j++) 
+/*###*/        printf("%c", word[j]); 
+/*###*/    printf("\"\t\t");
+/*###*/    if (retval) {
+/*###*/        printf("%ld %ld %ld %ld\n", entry.header.doc.docs, entry.header.doc.occurs, entry.header.doc.last, entry.size);
+/*###*/    } else {
+/*###*/        printf("NOT FOUND\n");
+/*###*/    }
+/*###*/}
+
             if (retval < 0) {
                 return 0;
             } else if (retval == 0) {

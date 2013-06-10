@@ -43,6 +43,15 @@
 /* number of significant digits in estimated results */
 #define RESULTS_SIGDIGITS 3
 
+//### proteus
+#define PR_DBG_PRINT 0
+#include <sys/time.h>
+#include <time.h>
+
+
+long int iotime;
+//### proteus
+
 /* functions to return sources from terms and conjuncts */
 struct search_list_src *memsrc_new_fromdisk(struct index *idx, 
   unsigned int type, unsigned int fileno, unsigned long int offset, 
@@ -914,6 +923,9 @@ enum search_ret doc_ord_eval(struct index *idx, struct query *query,
     /* sort small vectors by disk location */
     qsort(srcarr, small, sizeof(*srcarr), loc_cmp);
 
+/*###*/ struct timeval start, end;
+/*###*/ gettimeofday(&start, NULL);
+
     /* read them all off of disk, in location order.  This speeds disk transfer,
      * by minimising the amount of seeking that needs to be done. */
     for (i = 0; i < small; i++) {
@@ -936,8 +948,17 @@ enum search_ret doc_ord_eval(struct index *idx, struct query *query,
         }
     }
 
+/*###*/ gettimeofday(&end, NULL);
+/*###*/ printf("readallshort: %ld ", (unsigned long int) (end.tv_usec - start.tv_usec + (end.tv_sec - start.tv_sec) * 1000000));
+
     /* sort by term again */
     qsort(srcarr, small, sizeof(*srcarr), term_cmp);
+
+#if PR_DBG_PRINT
+    printf("\tlist_mem_limit: %d\n", list_mem_limit);
+    printf("\tsmall lists (lists in memory): %d\n", small);
+    for(i=0;i<small;i++) printf("\t\t\"%s\" size: %ld, ft: %d\n", srcarr[i].term->term.term, srcarr[i].term->term.vocab.size, srcarr[i].term->f_t);
+#endif
 
     /* process terms that have no chance of overflowing the accumulator limit 
      * in OR mode */
@@ -1147,6 +1168,11 @@ int index_search(struct index *idx, const char *querystr,
         }
     }
 
+/*###*/ printf("\nquery: %s", querystr);
+/*###*/ struct timeval start, end;
+/*###*/ gettimeofday(&start, NULL);
+/*###*/ iotime = 0;
+
     /* construct a query structure */
     query.terms = 0;
     if (!(index_querybuild(idx, &query, querystr, str_len(querystr), 
@@ -1158,6 +1184,10 @@ int index_search(struct index *idx, const char *querystr,
         ERROR1("building query '%s'", querystr);
         return 0;
     }
+
+/*###*/ gettimeofday(&end, NULL);
+/*###*/ printf("\nquerybuild: %ld ", (unsigned long int) (end.tv_usec - start.tv_usec + (end.tv_sec - start.tv_sec) * 1000000));
+/*###*/ iotime += (unsigned long int) (end.tv_usec - start.tv_usec + (end.tv_sec - start.tv_sec) * 1000000);
 
     /* calculate the amount of memory required and create an allocator */
     mem = 0;
@@ -1192,8 +1222,12 @@ int index_search(struct index *idx, const char *querystr,
     /* limit memory usage */
     if (memsum > idx->params.memory) {
         mem = idx->params.memory;
+/*###*/ if (PR_DBG_PRINT)
+/*###*/     printf("\tsome lists fit in memory (total list size: %d, mem limit: %d)\n", memsum, mem);
     } else {
         mem = memsum;
+/*###*/ if (PR_DBG_PRINT)
+/*###*/     printf("\tall lists fit in memory (total list size: %d, mem limit: %d)\n", memsum, mem);
     }
 
     /* initialise list allocator */
@@ -1268,6 +1302,13 @@ int index_search(struct index *idx, const char *querystr,
         results.alloc = acc_alloc;
         ret = doc_ord_eval(idx, &query, list_alloc.opaque, mem, &results, 
             opts, opt);
+
+/*###*/ if (ret != SEARCH_OK) {
+/*###*/     printf("Error in query '%s': doc_ord_eval() return 0\n", querystr);
+/*###*/     exit(0);
+/*###*/ }
+/*###*/ printf("iotime: %ld ", iotime);
+
         accs = results.accs;
         acc = results.acc;
         *total_results = results.total_results; 
@@ -1408,13 +1449,20 @@ static struct search_list_src *memsrc_new_from_disk(struct index *idx,
     int fd = fdset_pin(idx->fd, type, fileno, offset, SEEK_SET);
     ssize_t read_bytes;
 
+/*###*/struct timeval start, end;
+
     if ((fd >= 0) && (pos = mem)) {
+
+        bytes = size;
         do {
+/*###*/ gettimeofday(&start, NULL);
             read_bytes = read(fd, pos, bytes);
+/*###*/ gettimeofday(&end, NULL);
+/*###*/ iotime += (unsigned long int) (end.tv_usec - start.tv_usec + (end.tv_sec - start.tv_sec) * 1000000);
         } while ((read_bytes != -1) 
           && (pos += read_bytes, bytes -= read_bytes));
-
         fdset_unpin(idx->fd, type, fileno, fd);
+
         if (!bytes) {
             return memsrc_new(mem, size);
         }
@@ -1518,6 +1566,9 @@ static enum search_ret disksrc_read(struct search_list_src *src,
             cap = dsrc->bufcap - dsrc->bufsize;
         }
 
+/*###*/ struct timeval start, end;
+/*###*/ gettimeofday(&start, NULL);
+
         while ((bytes = read(dsrc->fd, dsrc->buf + dsrc->bufsize, cap)) == -1) {
             switch (errno) {
             case EINTR: /* do nothing, try again */ break;
@@ -1525,6 +1576,10 @@ static enum search_ret disksrc_read(struct search_list_src *src,
             default: return SEARCH_EINVAL;
             }
         }
+
+/*###*/ gettimeofday(&end, NULL);
+/*###*/ iotime += (unsigned long int) (end.tv_usec - start.tv_usec + (end.tv_sec - start.tv_sec) * 1000000);
+
         dsrc->bufsize += bytes;
         dsrc->pos += bytes;
 

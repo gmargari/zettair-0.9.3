@@ -29,6 +29,8 @@
 #include <string.h>
 #include <signal.h>
 
+/*###*/ int fc = 0; // flush cache before each query
+
 void print_usage(const char *progname, FILE *output, int verbose) {
     const char *name = str_rchr(progname, '/');
 
@@ -1241,12 +1243,17 @@ int search(struct index *idx, const char *query, struct index_result *result,
     /* check to see whether they have requested a document from the cache */
     if (!is_cache_request(query, maxwordlen, &docno)) {
 
+/*###*/ if (fc) {
+/*###*/     system("echo 3 > /proc/sys/vm/drop_caches");
+/*###*/ }
+
         gettimeofday(&then, NULL);
 
         if (index_search(idx, query, start, requested,
               result, &results, &total_results, &est, opts, opt)) {
 
             gettimeofday(&now, NULL);
+/*###*/     printf("totaltime: %ld\n", (unsigned long int) (now.tv_usec - then.tv_usec + (now.tv_sec - then.tv_sec) * 1000000));
 
             seconds = (double) ((now.tv_sec - then.tv_sec) 
               + (now.tv_usec - (double) then.tv_usec) / 1000000.0);
@@ -1488,11 +1495,20 @@ int main(int argc, char **argv) {
     struct timeval now, 
                    then;
 
-    if (isatty(STDOUT_FILENO)) {
-        output = stdout;
-    } else {
-        output = stderr;
-    }
+    output = stdout; 
+//    if (isatty(STDOUT_FILENO)) {
+//        output = stdout;
+//    } else {
+//        output = stderr;
+//    }
+
+/*###*/FILE *ff = fopen("flush_cache.txt", "r");
+/*###*/if (ff != NULL) {
+/*###*/    fc = 1;
+/*###*/    printf("*** flushing cache before each query ***\n");
+/*###*/} else {
+/*###*/    printf("*** using system cache as normal ***\n");
+/*###*/}
 
     if (!getcwd(path, FILENAME_MAX)) {
         fprintf(stderr, "failed to get current working directory\n");

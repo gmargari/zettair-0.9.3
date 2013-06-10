@@ -1,0 +1,8 @@
+*.o
+*.lo
+*_1
+.deps
+.dirstamp
+*.test
+.libs
+zet*

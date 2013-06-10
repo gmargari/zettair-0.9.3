@@ -19,6 +19,9 @@
 #endif
 
 /* whether to perform expensive debugging checks (define to 0 to turn off) */
+
+#define NDEBUG 0
+
 #ifdef NDEBUG
 #define DEAR_DEBUG 0
 #else
